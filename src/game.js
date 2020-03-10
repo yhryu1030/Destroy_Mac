@@ -26,8 +26,8 @@ var game = new Phaser.Game(config);
 
 function preload ()
 {
-    this.load.image('obstacle', 'asset/obstacle.png');
-    this.load.image('student', 'asset/student.png');
+    this.load.image('obstacle', 'assets/obstacle.png');
+    this.load.image('student', 'assets/student.png');
 
     
     
