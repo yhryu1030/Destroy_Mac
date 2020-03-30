@@ -2,6 +2,8 @@ var player;
 var platforms;
 var cursors;
 
+import frenzy from "./frenzy.js";
+
 export default new Phaser.Class({
     Extends: Phaser.Scene,
 
@@ -31,6 +33,14 @@ export default new Phaser.Class({
         cursors = this.input.keyboard.createCursorKeys();
     
         this.physics.add.collider(player, platforms);
+
+        this.input.once('pointerdown', function () {
+
+            console.log('From stealth to frenzy');
+
+            this.scene.start('frenzy');
+
+        }, this);
 
     },
 

@@ -1,4 +1,5 @@
 import stealth from "./stealth.js";
+import frenzy from "./frenzy.js";
 
 var config = {
     type: Phaser.AUTO,
@@ -11,7 +12,7 @@ var config = {
             debug: false
         }
     },
-    scene: [stealth]
+    scene: [ stealth, frenzy ]
 };
 
 
