@@ -13,12 +13,12 @@ export default new Phaser.Class({
 
     preload: function ()
     {
-        this.load.image('computer', 'assets/imac.jpg'); // from https://www.pexels.com/photo/photo-of-imac-near-macbook-1029757/
+        this.load.image('imac', 'assets/imac.jpg'); // from https://www.pexels.com/photo/photo-of-imac-near-macbook-1029757/
     },
 
     create: function ()
     {
-        this.add.sprite(400, 300, 'computer');
+        this.add.sprite(400, 300, 'imac');
 
         this.input.once('pointerdown', function () {
 
