@@ -1,3 +1,10 @@
+/** General setups */
+export function setPhysics(scene, player, platforms, guard,gameOver,computer){
+    scene.physics.add.collider(player, platforms);
+    scene.physics.add.collider(platforms, guard);
+    scene.physics.add.collider(player, guard,getCaught,null,scene);
+    scene.physics.add.collider(player, computer, breakComp, null, scene);
+}
 /*
 Guards Section
 */
@@ -10,13 +17,6 @@ export function setGuards(guard){
     guard.allowGravity = false;
     guard.setVelocityX(100);
 }
-
-export function setPhysics(scene, player, platforms, guard,gameOver){
-    scene.physics.add.collider(player, platforms);
-    scene.physics.add.collider(platforms, guard);
-    scene.physics.add.collider(player, guard,getCaught,null,scene);
-}
-
 function getCaught (player, guard,gameOver)
 {
     this.physics.pause();
@@ -37,3 +37,8 @@ export function patrol(guard){
     }
 }
 
+/** Functions for computers */
+
+export function breakComp(computer){
+    computer.disableBody(true, true);
+}

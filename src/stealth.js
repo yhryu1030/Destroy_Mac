@@ -1,12 +1,12 @@
 var player;
 var platforms;
 var cursors;
-// var guards;
+var computer;
 var guard;
 var gameOver=false;
 
 import frenzy from "./frenzy.js";
-import * as logics from "./stealthLogics.js";
+import * as logic from "./stealthLogics.js";
 
 export default new Phaser.Class({
     Extends: Phaser.Scene,
@@ -33,15 +33,19 @@ export default new Phaser.Class({
         
         this.add.image(400, 300, 'obstacle');
         
-        player = this.physics.add.sprite(100, 450, 'student');
+        player = this.physics.add.sprite(100, 400, 'student');
         player.setBounce(0);
         player.setCollideWorldBounds(true);
+        
+        // gameOver=false;
+
         cursors = this.input.keyboard.createCursorKeys();
-        // guards = this.physics.add.group();
+        computer = this.physics.add.sprite(100, 550, 'computer');
         guard = this.physics.add.sprite(100, 60, 'guard');
         
-        logics.setGuards(guard);
-        logics.setPhysics(this, player, platforms, guard,gameOver);
+
+        logic.setGuards(guard);
+        logic.setPhysics(this, player, platforms, guard,gameOver,computer);
 
         this.input.once('pointerdown', function () {
 
@@ -55,7 +59,7 @@ export default new Phaser.Class({
 
     update: function()
     {
-        logics.patrol(guard);
+        logic.patrol(guard);
 
         if (!cursors.up.isDown && !cursors.down.isDown){
             player.setVelocityY(0);
