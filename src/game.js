@@ -3,6 +3,7 @@ import frenzy from "./frenzy.js";
 
 var config = {
     type: Phaser.AUTO,
+    parent: 'phaser-example',
     width: 800,
     height: 600,
     physics: {
@@ -14,7 +15,5 @@ var config = {
     },
     scene: [ stealth, frenzy ]
 };
-
-
 
 var game = new Phaser.Game(config);

@@ -20,10 +20,10 @@ export default new Phaser.Class({
 
     preload: function ()
     {
-        this.load.image('obstacle', 'assets/obstacle.png');
-        this.load.image('student', 'assets/student.png');
-        this.load.image('guard','assets/guard.png');
-        this.load.image('computer','assets/computer.png');
+        this.load.image('obstacle', 'assets/images/obstacle.png');
+        this.load.image('student', 'assets/images/student.png');
+        this.load.image('guard','assets/images/guard.png');
+        this.load.image('computer','assets/images/computer.png');
     },
 
     create: function ()
