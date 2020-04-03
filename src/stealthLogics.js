@@ -25,7 +25,7 @@ function getCaught (player, guard,gameOver)
 
     gameOver = true;
 
-    console.log('Game Over');
+    console.log('Game Over'); //debugging
 }
 
 export function patrol(guard){
@@ -39,6 +39,8 @@ export function patrol(guard){
 
 /** Functions for computers */
 
-export function breakComp(computer){
+function breakComp(player,computer){
+    console.log('Broke the Computer'); // debug
+
     computer.disableBody(true, true);
 }
