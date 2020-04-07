@@ -28,38 +28,36 @@ export default new Phaser.Class({
 
     create: function ()
     {
+        gameOver=false;
+
         platforms = this.physics.add.staticGroup();
         platforms.create(400, 300, 'obstacle');
-        
         this.add.image(400, 300, 'obstacle');
         
         player = this.physics.add.sprite(100, 400, 'student');
         player.setBounce(0);
         player.setCollideWorldBounds(true);
         
-        // gameOver=false;
-
         cursors = this.input.keyboard.createCursorKeys();
-        computer = this.physics.add.sprite(100, 550, 'computer');
-        guard = this.physics.add.sprite(100, 60, 'guard');
         
-
-        logic.setGuards(guard);
-        logic.setPhysics(this, player, platforms, guard,gameOver,computer);
-
-        this.input.once('pointerdown', function () {
-
-            console.log('From stealth to frenzy');
-
-            this.scene.start('frenzy');
-
-        }, this);
-
+        computer = this.physics.add.sprite(100, 550, 'computer');
+        
+        guard = this.physics.add.sprite(100, 60, 'guard');
+        guard.setBounce(0);
+        guard.setCollideWorldBounds(true);
+        guard.allowGravity = false;
+        guard.setVelocityX(100);
+        
+        this.physics.add.collider(player, platforms);
+        this.physics.add.collider(platforms, guard);
+        this.physics.add.collider(player, guard,this.getCaught,null,this);
+        this.physics.add.collider(player, computer, this.breakComp, null, this);
     },
+
 
     update: function()
     {
-        logic.patrol(guard);
+        this.patrol();
 
         if (!cursors.up.isDown && !cursors.down.isDown){
             player.setVelocityY(0);
@@ -85,6 +83,32 @@ export default new Phaser.Class({
             player.setVelocityX(-160);
         }
 
+    },
+
+    patrol: function(){
+        if(guard.x>600){
+            guard.setVelocityX(-100);
+        }
+        if(guard.x<100){ 
+            guard.setVelocityX(100);
+        }
+    },
+
+    getCaught: function(player){
+        this.physics.pause();
+
+        player.setTint(0xff0001);
+    
+        gameOver = true;
+    
+        console.log('Game Over'); //debugging
+    },
+
+    breakComp: function(player,computer){
+        this.scene.start('frenzy');
+        console.log('from stealth to frenzy');
+        //console.log('Broke the Computer'); // debug
+        computer.disableBody(true, true);
     }
 
 });
