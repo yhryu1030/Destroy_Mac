@@ -39,8 +39,9 @@ export function patrol(guard){
 
 /** Functions for computers */
 
-function breakComp(player,computer){
+function breakComp(player,computer,scene){
     console.log('Broke the Computer'); // debug
 
     computer.disableBody(true, true);
+    // this.scene.start('frenzy');
 }
