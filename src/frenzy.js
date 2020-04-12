@@ -1,4 +1,5 @@
 var fist;
+var cursors;
 
 import stealth from "./stealth.js";
 
@@ -33,13 +34,14 @@ export default new Phaser.Class({
         this.anims.create({ key: 'punch', frames: frameNames, frameRate: 30, repeat: -1 }); // sets speed and repetition of the animation
         fist.anims.play('punch');
 
+        //keyboard setting
         // this.add.sprite(400, 300, 'imac');
 
-        this.input.once('pointerdown', function () {
-
+        this.input.on('pointerdown', function () {
+            // cursors.reset;
+            // this.scene.stop();
             console.log('From frenzy to stealth');
-
-            this.scene.start('stealth');
+            this.scene.switch('stealth');
 
         }, this);
     }
