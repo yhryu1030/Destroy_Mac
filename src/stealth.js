@@ -129,32 +129,32 @@ export default new Phaser.Class({
 
         if (cursors.up.isUp && cursors.down.isUp){
             player.setVelocityY(0);
-            console.log('Not upwards'); 
+            // console.log('Not upwards'); 
         }
         if (cursors.left.isUp && cursors.right.isUp){
             player.setVelocityX(0); 
-            console.log('Not sideways'); 
+            // console.log('Not sideways'); 
         }
     
         if (cursors.up.isDown && !cursors.up.isUp)
         {
             player.setVelocityY(-160);
-            console.log('Going up'); 
+            // console.log('Going up'); 
         }
         if (cursors.down.isDown && !cursors.down.isUp)
         {
             player.setVelocityY(160);
-            console.log('Going down'); 
+            // console.log('Going down'); 
         }
         if(cursors.right.isDown && !cursors.right.isUp)
         {
             player.setVelocityX(160);
-            console.log('Going right'); 
+            // console.log('Going right'); 
         }
         if (cursors.left.isDown && !cursors.left.isUp)
         {
             player.setVelocityX(-160);
-            console.log('Going left'); 
+            // console.log('Going left'); 
         }
 
     },
