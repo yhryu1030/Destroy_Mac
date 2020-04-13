@@ -109,6 +109,23 @@ export default new Phaser.Class({
         console.log('from stealth to frenzy');
         //console.log('Broke the Computer'); // debug
         computer.disableBody(true, true);
+
+        if (cursors.up.isDown)
+        {
+            player.setVelocityY(0);
+        }
+        if (cursors.down.isDown)
+        {
+            player.setVelocityY(0);
+        }
+        if(cursors.right.isDown)
+        {
+            player.setVelocityX(0);
+        }
+        if (cursors.left.isDown)
+        {
+            player.setVelocityX(0);        
+        }
     }
 
 });
