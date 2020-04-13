@@ -19,12 +19,16 @@ export default new Phaser.Class({
         this.load.image('imac', 'assets/images/imac.jpg'); // from https://www.pexels.com/photo/photo-of-imac-near-macbook-1029757/
         this.load.image('fist', 'assets/punching/punch/punch6.png');
         // this.load.multiatlas('punching', 'assets/punching.json', 'assets'); // loads sprite sheet
+        this.load.audio('punchSound','assets/sound/punch1.mp3'); //loads the punching sound
     },
 
     create: function ()
     {
         // background
         var background = this.add.image(400, 300, 'imac');
+
+        //Sound
+        this.punch1 = this.sound.add('punchSound');
 
         // sprite
         fist = this.add.image(400, 800, 'fist');
@@ -36,6 +40,10 @@ export default new Phaser.Class({
         // fist.anims.play('smack');
 
         cursors = this.input.keyboard.createCursorKeys();
+        //play Sound : test
+        //this.punch1.play();
+
+        // this.add.sprite(400, 300, 'imac');
 
         this.input.on('pointerdown', function () {
 
