@@ -1,5 +1,5 @@
 var fist;
-var mousepointer;
+var cursors;
 
 import stealth from "./stealth.js";
 
@@ -16,53 +16,60 @@ export default new Phaser.Class({
 
     preload: function ()
     {
-        // this.load.image('imac', 'assets/imac.jpg'); // from https://www.pexels.com/photo/photo-of-imac-near-macbook-1029757/
-        this.load.multiatlas('punching', 'assets/punching.json', 'assets'); // loads sprite sheet
+        this.load.image('imac', 'assets/images/imac.jpg'); // from https://www.pexels.com/photo/photo-of-imac-near-macbook-1029757/
+        this.load.image('fist', 'assets/punching/punch/punch6.png');
+        // this.load.multiatlas('punching', 'assets/punching.json', 'assets'); // loads sprite sheet
         this.load.audio('punchSound','assets/sound/punch1.mp3'); //loads the punching sound
     },
 
     create: function ()
     {
         // background
-        var background = this.add.sprite(0, 0, 'punching', 'imac.jpg');
+        var background = this.add.image(400, 300, 'imac');
 
         //Sound
         this.punch1 = this.sound.add('punchSound');
 
         // sprite
-        fist = this.add.sprite(400, 600, 'punching', 'punch/punch1.png');
+        fist = this.add.image(400, 800, 'fist');
         // fist.setScale(0.5, 0.5);
 
         // animation
-        var frameNames = this.anims.generateFrameNames('punching', { start: 1, end: 6, zeroPad: 1, prefix:'punch/punch', suffix:'.png' }); // calls all the images
-        this.anims.create({ key: 'punch', frames: frameNames, frameRate: 30, repeat: -1 }); // sets speed and repetition of the animation
-        fist.anims.play('punch');
+        // var frameNames = this.anims.generateFrameNames('punching', { start: 1, end: 9, zeroPad: 1, prefix:'punch/punch', suffix:'.png' }); // calls all the images
+        // this.anims.create({ key: 'smack', frames: frameNames, frameRate: 5, repeat: 0 }); // sets speed and repetition of the animation
+        // fist.anims.play('smack');
 
-        // play Sound : test;
-        // this.punch1.play();
+        cursors = this.input.keyboard.createCursorKeys();
+        //play Sound : test
+        //this.punch1.play();
 
         // this.add.sprite(400, 300, 'imac');
 
         this.input.on('pointerdown', function () {
-            // cursors.reset;
-            // this.scene.stop();
-            console.log('From frenzy to stealth');
-            this.scene.switch('stealth');
+
+            console.log('punch');
+
+            this.tweens.add({
+                targets: fist,
+                y: 450,
+                duration: 50,
+                ease: 'Cubic.easeIn',
+                repeat: 0,
+                yoyo: true,
+            });
 
         }, this);
+
+    },
+
+    update: function()
+    {
+        if (cursors.space.isDown) {
+            console.log('From frenzy to stealth');
+
+            this.scene.start('stealth');
+        }
     }
 
-    // update: function(computer){
-    //     this.hit(computer);
-    // },
-
-    // hit: function(computer){
-    //     if(pointer.isDown && computer.health!=0){
-    //         computer.health-=1;
-    //     }
-    //     else if(pointer.isDown && computer.health==0){
-    //         this.scene.switch('stealth');
-    //     }
-    // }
 
 });
