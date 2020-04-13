@@ -38,7 +38,7 @@ export default new Phaser.Class({
         this.anims.create({ key: 'punch', frames: frameNames, frameRate: 30, repeat: -1 }); // sets speed and repetition of the animation
         fist.anims.play('punch');
 
-        // play Sound : test
+        // play Sound : test;
         // this.punch1.play();
 
         // this.add.sprite(400, 300, 'imac');
