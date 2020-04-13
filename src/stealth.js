@@ -1,6 +1,6 @@
 var player;
 var platforms;
-var cursors;
+// var cursors;
 var computers=[];
 // var computer;
 // var guard;
@@ -19,6 +19,10 @@ export default new Phaser.Class({
     function sceneA ()
     {
         Phaser.Scene.call(this, { key: 'stealth' });
+    },
+
+    init: function(){
+        this.cursors=this.input.keyboard.createCursorKeys();
     },
 
     // cursors:this.input.keyboard.createCursorKeys(),
@@ -48,9 +52,9 @@ export default new Phaser.Class({
         player.setVelocityY(0);
         
         //Setting keyboard
-        cursors = this.input.keyboard.createCursorKeys();
+        // cursors = this.input.keyboard.createCursorKeys();
         
-        resetKeys=true;
+        resetKeys=false;
         
         //Setting computer
         computers[0] = this.physics.add.sprite(100, 550, 'computer');
@@ -99,59 +103,64 @@ export default new Phaser.Class({
         // cursors = this.input.keyboard.createCursorKeys();
         
         if(!resetKeys){
-            cursors.up.isDown=true;
-            cursors.up.isUp=true;
-            // cursors.up.isUp=false;
-            // cursors.up.isUp=true;
-
-            cursors.down.isDown=true;
-            cursors.down.isUp=true;
-            // cursors.down.isUp=false;
-            // cursors.down.isUp=true;
-
-            cursors.right.isDown=true;
-            cursors.right.isUp=true;
-            // cursors.right.isUp=false;
-            // cursors.right.isUp=true;
-
-            cursors.left.isDown=true;
-            cursors.left.isUp=true;
-            // cursors.left.isUp=false;
-            // cursors.left.isUp=true;
-
             console.log('Resetting'); //debugging
 
             player.setVelocityY(0);
             player.setVelocityX(0);
             resetKeys=true;
+
+            this.cursors.up.isDown=true;
+            this.cursors.up.isDown=false;
+            this.cursors.up.isUp=true;
+            // this.cursors.up.isUp=false;
+            // this.cursors.up.isUp=true;
+
+            this.cursors.down.isDown=true;
+            this.cursors.down.isDown=false;
+            this.cursors.down.isUp=true;
+            // this.cursors.down.isUp=false;
+            // this.cursors.down.isUp=true;
+
+            this.cursors.right.isDown=true;
+            this.cursors.right.isDown=false;
+            this.cursors.right.isUp=true;
+            // this.cursors.right.isUp=false;
+            // this.cursors.right.isUp=true;
+
+            this.cursors.left.isDown=true;
+            this.cursors.left.isDown=false;
+            this.cursors.left.isUp=true;
+            // this.cursors.left.isUp=false;
+            // this.cursors.left.isUp=true;
+
         }
         // resetKeys=true;
 
-        if (cursors.up.isUp && cursors.down.isUp){
+        if (this.cursors.up.isUp && this.cursors.down.isUp){
             player.setVelocityY(0);
             // console.log('Not upwards'); 
         }
-        if (cursors.left.isUp && cursors.right.isUp){
+        if (this.cursors.left.isUp && this.cursors.right.isUp){
             player.setVelocityX(0); 
             // console.log('Not sideways'); 
         }
     
-        if (cursors.up.isDown && !cursors.up.isUp)
+        if (this.cursors.up.isDown && !this.cursors.up.isUp)
         {
             player.setVelocityY(-160);
             // console.log('Going up'); 
         }
-        if (cursors.down.isDown && !cursors.down.isUp)
+        if (this.cursors.down.isDown && !this.cursors.down.isUp)
         {
             player.setVelocityY(160);
             // console.log('Going down'); 
         }
-        if(cursors.right.isDown && !cursors.right.isUp)
+        if(this.cursors.right.isDown && !this.cursors.right.isUp)
         {
             player.setVelocityX(160);
             // console.log('Going right'); 
         }
-        if (cursors.left.isDown && !cursors.left.isUp)
+        if (this.cursors.left.isDown && !this.cursors.left.isUp)
         {
             player.setVelocityX(-160);
             // console.log('Going left'); 
@@ -182,18 +191,12 @@ export default new Phaser.Class({
     },
 
     breakComp: function(player,computer){
-        // this.scene.sleep();
-        // cursors.destroy;
-        // this.scene.pause();
+        this.scene.sleep();
         this.scene.switch('frenzy');
         console.log('from stealth to frenzy');
-        // frenzy.update(computer);
         resetKeys=false;
-        
-        // if(computer.health==0){
         computer.disableBody(true, true);
         console.log('Broke the Computer'); // debug
-        // }
         
         
     }
