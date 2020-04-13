@@ -50,13 +50,15 @@ export default new Phaser.Class({
         //Setting keyboard
         cursors = this.input.keyboard.createCursorKeys();
         
-        resetKeys=false;
+        resetKeys=true;
         
         //Setting computer
         computers[0] = this.physics.add.sprite(100, 550, 'computer');
         computers[1]=this.physics.add.sprite(0, 550, 'computer');
         computers[0].body.immovable = true;
         computers[1].body.immovable = true;
+        computers[0].health=5;
+        computers[1].health=5;
 
         //Setting guards
         guards[0] = this.physics.add.sprite(100, 60, 'guard');
@@ -94,45 +96,65 @@ export default new Phaser.Class({
     update: function()
     {
         this.patrol();
+        // cursors = this.input.keyboard.createCursorKeys();
         
         if(!resetKeys){
             cursors.up.isDown=true;
             cursors.up.isUp=true;
+            // cursors.up.isUp=false;
+            // cursors.up.isUp=true;
 
             cursors.down.isDown=true;
             cursors.down.isUp=true;
+            // cursors.down.isUp=false;
+            // cursors.down.isUp=true;
 
             cursors.right.isDown=true;
             cursors.right.isUp=true;
+            // cursors.right.isUp=false;
+            // cursors.right.isUp=true;
 
             cursors.left.isDown=true;
             cursors.left.isUp=true;
+            // cursors.left.isUp=false;
+            // cursors.left.isUp=true;
 
+            console.log('Resetting'); //debugging
+
+            player.setVelocityY(0);
+            player.setVelocityX(0);
             resetKeys=true;
         }
+        // resetKeys=true;
 
         if (cursors.up.isUp && cursors.down.isUp){
             player.setVelocityY(0);
+            console.log('Not upwards'); 
         }
         if (cursors.left.isUp && cursors.right.isUp){
-            player.setVelocityX(0);    
+            player.setVelocityX(0); 
+            console.log('Not sideways'); 
         }
     
         if (cursors.up.isDown && !cursors.up.isUp)
         {
             player.setVelocityY(-160);
+            console.log('Going up'); 
         }
         if (cursors.down.isDown && !cursors.down.isUp)
         {
             player.setVelocityY(160);
+            console.log('Going down'); 
         }
         if(cursors.right.isDown && !cursors.right.isUp)
         {
             player.setVelocityX(160);
+            console.log('Going right'); 
         }
         if (cursors.left.isDown && !cursors.left.isUp)
         {
             player.setVelocityX(-160);
+            console.log('Going left'); 
         }
 
     },
@@ -161,12 +183,17 @@ export default new Phaser.Class({
 
     breakComp: function(player,computer){
         // this.scene.sleep();
-        resetKeys=false;
+        // cursors.destroy;
+        // this.scene.pause();
         this.scene.switch('frenzy');
         console.log('from stealth to frenzy');
-        console.log('Broke the Computer'); // debug
-        computer.disableBody(true, true);
+        // frenzy.update(computer);
+        resetKeys=false;
         
+        // if(computer.health==0){
+        computer.disableBody(true, true);
+        console.log('Broke the Computer'); // debug
+        // }
         
         
     }

@@ -1,5 +1,5 @@
 var fist;
-var cursors;
+var mousepointer;
 
 import stealth from "./stealth.js";
 
@@ -34,7 +34,8 @@ export default new Phaser.Class({
         this.anims.create({ key: 'punch', frames: frameNames, frameRate: 30, repeat: -1 }); // sets speed and repetition of the animation
         fist.anims.play('punch');
 
-        //keyboard setting
+        //Mouse setting
+        // mousepointer=scene.input.activePointer;
         // this.add.sprite(400, 300, 'imac');
 
         this.input.on('pointerdown', function () {
@@ -45,5 +46,18 @@ export default new Phaser.Class({
 
         }, this);
     }
+
+    // update: function(computer){
+    //     this.hit(computer);
+    // },
+
+    // hit: function(computer){
+    //     if(pointer.isDown && computer.health!=0){
+    //         computer.health-=1;
+    //     }
+    //     else if(pointer.isDown && computer.health==0){
+    //         this.scene.switch('stealth');
+    //     }
+    // }
 
 });
