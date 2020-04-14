@@ -41,13 +41,14 @@ export default new Phaser.Class({
 
         cursors = this.input.keyboard.createCursorKeys();
         //play Sound : test
+        //this.punch1.play();
 
         // this.add.sprite(400, 300, 'imac');
 
         this.input.on('pointerdown', function () {
 
             console.log('punch');
-            this.punch1.play();
+
             this.tweens.add({
                 targets: fist,
                 y: 450,
@@ -65,7 +66,7 @@ export default new Phaser.Class({
     {
         if (cursors.space.isDown) {
             console.log('From frenzy to stealth');
-            cursors.space.isDown=false;
+            cursors.space.isDown = false;
             this.scene.switch('stealth');
         }
     }
