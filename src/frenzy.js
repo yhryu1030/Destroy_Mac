@@ -66,8 +66,8 @@ export default new Phaser.Class({
     {
         if (cursors.space.isDown) {
             console.log('From frenzy to stealth');
-
-            this.scene.start('stealth');
+            cursors.space.isDown = false;
+            this.scene.switch('stealth');
         }
     }
 
