@@ -47,8 +47,8 @@ export default new Phaser.Class({
         computers[1]=this.physics.add.sprite(0, 550, 'computer');
         computers[0].body.immovable = true;
         computers[1].body.immovable = true;
-        computers[0].health=5;
-        computers[1].health=5;
+        computers[0].health=33;
+        computers[1].health=33;
 
         //Setting guards
         guards[0] = this.physics.add.sprite(100, 60, 'guard');
