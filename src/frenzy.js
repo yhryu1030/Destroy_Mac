@@ -1,5 +1,6 @@
 var fist;
 var cursors;
+// var stealthkeys;
 
 import stealth from "./stealth.js";
 
@@ -7,11 +8,15 @@ export default new Phaser.Class({
 
     Extends: Phaser.Scene,
 
-    initialize:
-
-    function frenzy ()
+    initialize:function frenzy ()
     {
         Phaser.Scene.call(this, { key: 'frenzy' });
+    },
+
+    init: function(data){
+        this.stealthKeys=data.keys;
+        this.computer=data.comp;
+        this.cursors=this.input.keyboard.createCursorKeys();
     },
 
     preload: function ()
@@ -33,17 +38,6 @@ export default new Phaser.Class({
         // sprite
         fist = this.add.image(400, 800, 'fist');
         // fist.setScale(0.5, 0.5);
-
-        // animation
-        // var frameNames = this.anims.generateFrameNames('punching', { start: 1, end: 9, zeroPad: 1, prefix:'punch/punch', suffix:'.png' }); // calls all the images
-        // this.anims.create({ key: 'smack', frames: frameNames, frameRate: 5, repeat: 0 }); // sets speed and repetition of the animation
-        // fist.anims.play('smack');
-
-        cursors = this.input.keyboard.createCursorKeys();
-        //play Sound : test
-
-        // this.add.sprite(400, 300, 'imac');
-
         this.input.on('pointerdown', function () {
 
             console.log('punch');
@@ -56,17 +50,26 @@ export default new Phaser.Class({
                 repeat: 0,
                 yoyo: true,
             });
-
+            if(this.computer.health >0){
+                this.computer.health--;
+                console.log('Hit');
+            }
         }, this);
 
     },
 
     update: function()
     {
-        if (cursors.space.isDown) {
+        if (this.cursors.space.isDown|| this.computer.health ==0) {
+            if(this.computer.health <=0){
+                console.log('broken');
+                this.computer.disableBody(true, true);
+            }
             console.log('From frenzy to stealth');
-            cursors.space.isDown=false;
-            this.scene.switch('stealth');
+            this.cursors.space.isDown=false;
+            this.scene.resume('stealth');
+            this.stealthKeys.enabled=true;
+            this.scene.stop();
         }
     }
 
