@@ -1,31 +1,24 @@
 var player;
 var platforms;
-// var cursors;
 var computers=[];
-// var computer;
-// var guard;
 var guards=[];
-var gameOver=false;
-var resetKeys;
 
 import frenzy from "./frenzy.js";
-// import * as logic from "./stealthLogics.js";
 
 export default new Phaser.Class({
     Extends: Phaser.Scene,
 
-    initialize:
-
-    function sceneA ()
+    initialize: function sceneA ()
     {
         Phaser.Scene.call(this, { key: 'stealth' });
     },
 
     init: function(){
+        //Setting keyboard.
         this.cursors=this.input.keyboard.createCursorKeys();
+        this.gameOver=false;
+        // this.reset=true;
     },
-
-    // cursors:this.input.keyboard.createCursorKeys(),
 
     preload: function ()
     {
@@ -37,8 +30,6 @@ export default new Phaser.Class({
 
     create: function ()
     {
-        gameOver=false;
-        
         //Setting obstacles
         platforms = this.physics.add.staticGroup();
         platforms.create(400, 300, 'obstacle');
@@ -50,11 +41,6 @@ export default new Phaser.Class({
         player.setCollideWorldBounds(true);
         player.setVelocityX(0);
         player.setVelocityY(0);
-        
-        //Setting keyboard
-        // cursors = this.input.keyboard.createCursorKeys();
-        
-        resetKeys=false;
         
         //Setting computer
         computers[0] = this.physics.add.sprite(100, 550, 'computer');
@@ -82,88 +68,43 @@ export default new Phaser.Class({
         this.physics.add.collider(player, platforms);
         this.physics.add.collider(platforms, guards);
         this.physics.add.collider(player, guards,this.getCaught,null,this);
-        this.physics.add.collider(player, computers, this.breakComp, null, this);
+        this.physics.add.overlap(player, computers, this.breakComp, null, this);
 
         this.input.on('pointerdown', function () {
 
-            if(gameOver){
+            if(this.gameOver){
                 this.scene.start('stealth');
             }
 
         }, this);
-
-        
-        // this.input.mouse.capture = true;
     },
 
 
     update: function()
     {
         this.patrol();
-        // cursors = this.input.keyboard.createCursorKeys();
-        
-        if(!resetKeys){
-            console.log('Resetting'); //debugging
-
-            player.setVelocityY(0);
-            player.setVelocityX(0);
-            resetKeys=true;
-
-            this.cursors.up.isDown=true;
-            this.cursors.up.isDown=false;
-            this.cursors.up.isUp=true;
-            // this.cursors.up.isUp=false;
-            // this.cursors.up.isUp=true;
-
-            this.cursors.down.isDown=true;
-            this.cursors.down.isDown=false;
-            this.cursors.down.isUp=true;
-            // this.cursors.down.isUp=false;
-            // this.cursors.down.isUp=true;
-
-            this.cursors.right.isDown=true;
-            this.cursors.right.isDown=false;
-            this.cursors.right.isUp=true;
-            // this.cursors.right.isUp=false;
-            // this.cursors.right.isUp=true;
-
-            this.cursors.left.isDown=true;
-            this.cursors.left.isDown=false;
-            this.cursors.left.isUp=true;
-            // this.cursors.left.isUp=false;
-            // this.cursors.left.isUp=true;
-
-        }
-        // resetKeys=true;
-
         if (this.cursors.up.isUp && this.cursors.down.isUp){
             player.setVelocityY(0);
-            // console.log('Not upwards'); 
         }
         if (this.cursors.left.isUp && this.cursors.right.isUp){
             player.setVelocityX(0); 
-            // console.log('Not sideways'); 
         }
     
-        if (this.cursors.up.isDown && !this.cursors.up.isUp)
+        if (this.cursors.up.isDown)
         {
             player.setVelocityY(-160);
-            // console.log('Going up'); 
         }
-        if (this.cursors.down.isDown && !this.cursors.down.isUp)
+        if (this.cursors.down.isDown)
         {
             player.setVelocityY(160);
-            // console.log('Going down'); 
         }
-        if(this.cursors.right.isDown && !this.cursors.right.isUp)
+        if(this.cursors.right.isDown)
         {
             player.setVelocityX(160);
-            // console.log('Going right'); 
         }
-        if (this.cursors.left.isDown && !this.cursors.left.isUp)
+        if (this.cursors.left.isDown)
         {
             player.setVelocityX(-160);
-            // console.log('Going left'); 
         }
 
     },
@@ -171,13 +112,10 @@ export default new Phaser.Class({
     patrol: function(){
         if(guards[0].x>600){
             guards[0].setVelocityX(-100);
-            // guards[1].setVelocityX(100);
         }
         if(guards[0].x<100){ 
             guards[0].setVelocityX(100);
-            // guards[1].setVelocityX(-100);
         }
-
     },
 
     getCaught: function(player){
@@ -185,20 +123,33 @@ export default new Phaser.Class({
 
         player.setTint(0xff0001);
     
-        gameOver = true;
+        this.gameOver = true;
     
         console.log('Game Over'); //debugging
     },
 
     breakComp: function(player,computer){
-        this.scene.sleep();
-        this.scene.switch('frenzy');
-        console.log('from stealth to frenzy');
-        resetKeys=false;
-        computer.disableBody(true, true);
-        console.log('Broke the Computer'); // debug
-        
-        
+        if(this.cursors.space.isDown){
+            //Reset keys
+            this.input.keyboard.enabled=false;
+            
+            this.cursors.space.isDown=false;
+            
+            this.cursors.down.isDown=false;
+            this.cursors.up.isDown=false;
+            this.cursors.right.isDown=false;
+            this.cursors.left.isDown=false;
+
+            //Reset the player's velocity
+            player.setVelocityY(0);
+            player.setVelocityX(0); 
+
+            //Start the frenzy mode.
+            this.scene.launch('frenzy', {comp:computer,keys:this.input.keyboard});
+            this.scene.pause();
+            console.log('from stealth to frenzy');  
+        }
+
     }
 
 });
