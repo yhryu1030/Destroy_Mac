@@ -44,7 +44,9 @@ export default new Phaser.Class({
         
         //Setting computer
         computers[0] = this.physics.add.sprite(100, 550, 'computer');
+        computers[0].setDisplaySize(30,30);
         computers[1]=this.physics.add.sprite(0, 550, 'computer');
+        computers[1].setDisplaySize(30,30);
         computers[0].body.immovable = true;
         computers[1].body.immovable = true;
         computers[0].health=33;
@@ -52,6 +54,7 @@ export default new Phaser.Class({
 
         //Setting guards
         guards[0] = this.physics.add.sprite(100, 60, 'guard');
+        guards[0].setDisplaySize(60,80)
         guards[0].setBounce(0);
         guards[0].setCollideWorldBounds(true);
         guards[0].allowGravity = false;
@@ -70,13 +73,13 @@ export default new Phaser.Class({
         this.physics.add.collider(player, guards,this.getCaught,null,this);
         this.physics.add.overlap(player, computers, this.breakComp, null, this);
 
-        this.input.on('pointerdown', function () {
+        // this.input.on('pointerdown', function () {
 
-            if(this.gameOver){
-                this.scene.start('stealth');
-            }
+        //     if(this.gameOver){
+        //         this.scene.start('stealth');
+        //     }
 
-        }, this);
+        // }, this);
     },
 
 
@@ -124,6 +127,21 @@ export default new Phaser.Class({
         player.setTint(0xff0001);
     
         this.gameOver = true;
+
+        if(this.gameOver){
+
+            
+            this.cursors.space.isDown=false;
+            
+            this.cursors.down.isDown=false;
+            this.cursors.up.isDown=false;
+            this.cursors.right.isDown=false;
+            this.cursors.left.isDown=false;
+            this.scene.start('gameover');
+
+
+        }
+
     
         console.log('Game Over'); //debugging
     },
@@ -145,7 +163,7 @@ export default new Phaser.Class({
             player.setVelocityX(0); 
 
             //Start the frenzy mode.
-            this.scene.launch('frenzy', {comp:computer,keys:this.input.keyboard});
+            this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard});
             this.scene.pause();
             console.log('from stealth to frenzy');  
         }

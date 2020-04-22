@@ -1,5 +1,7 @@
 import stealth from "./stealth.js";
 import frenzy from "./frenzy.js";
+import start from "./start.js";
+import gameover from "./gameover.js";
 
 var config = {
     type: Phaser.AUTO,
@@ -13,7 +15,7 @@ var config = {
             debug: false
         }
     },
-    scene: [ stealth, frenzy ]
+    scene: [ start, stealth, frenzy, gameover ]
 };
 
 var game = new Phaser.Game(config);
