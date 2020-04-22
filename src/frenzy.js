@@ -46,22 +46,22 @@ export default new Phaser.Class({
         // sprite
         fist = this.add.image(400, 800, 'fist');
         // fist.setScale(0.5, 0.5);
-        if (this.computer.health <= 28) {
+        if (this.computer.health <= 28 && this.computer.health > 23) {
             this.background.setTexture('stage1');
         }
-        if (this.computer.health <= 23) {
+        else if (this.computer.health <= 23 && this.computer.health > 18) {
             this.background.setTexture('stage2');
         }
-        if (this.computer.health <= 18) {
+        else if (this.computer.health <= 18 && this.computer.health > 13) {
             this.background.setTexture('stage3');
         }
-        if (this.computer.health <= 13) {
+        else if (this.computer.health <= 13 && this.computer.health > 8) {
             this.background.setTexture('stage4');
         }
-        if (this.computer.health <= 8) {
+        else if (this.computer.health <= 8 && this.computer.health > 3) {
             this.background.setTexture('stage5');
         }
-        if (this.computer.health <= 3) {
+        else if (this.computer.health <= 3) {
             this.background.setTexture('stage6');
         }
         
