@@ -90,10 +90,10 @@ export default new Phaser.Class({
         
 
         if (this.cursors.space.isDown|| this.computer.health ==0) {
-            // if(this.computer.health <=0){
+            if(this.computer.health <=0){
             console.log('broken');
             this.computer.disableBody(true, true);
-            // }
+            }
             console.log('From frenzy to stealth');
             this.cursors.space.isDown=false;
             this.scene.resume('stealth');
