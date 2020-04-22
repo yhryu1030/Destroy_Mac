@@ -36,9 +36,9 @@ export default new Phaser.Class({
     create: function ()
     {
         // background
-        // var background = this.add.sprite(400, 300, 'imac');
-        // var stage1 = this.add.sprite(400, 300, 'stage1');
         this.background = this.add.sprite(400, 300, 'imac');
+        // var stage1 = this.add.sprite(400, 300, 'stage1');
+        // this.background = this.add.sprite(400, 300, 'imac');
 
         //Sound
         this.punch1 = this.sound.add('punchSound');
@@ -46,6 +46,26 @@ export default new Phaser.Class({
         // sprite
         fist = this.add.image(400, 800, 'fist');
         // fist.setScale(0.5, 0.5);
+        if (this.computer.health <= 28) {
+            this.background.setTexture('stage1');
+        }
+        if (this.computer.health <= 23) {
+            this.background.setTexture('stage2');
+        }
+        if (this.computer.health <= 18) {
+            this.background.setTexture('stage3');
+        }
+        if (this.computer.health <= 13) {
+            this.background.setTexture('stage4');
+        }
+        if (this.computer.health <= 8) {
+            this.background.setTexture('stage5');
+        }
+        if (this.computer.health <= 3) {
+            this.background.setTexture('stage6');
+        }
+        
+
         this.input.on('pointerdown', function () {
 
             console.log('punch');
@@ -54,11 +74,15 @@ export default new Phaser.Class({
             this.tweens.add({
                 targets: fist,
                 y: 450,
-                duration: 80,
+                duration: 50,
                 ease: 'Cubic.easeIn',
                 repeat: 0,
                 yoyo: true,
             });
+            if(this.computer.health >0){
+                this.computer.health--;
+                console.log('Hit');
+            }
             if (this.computer.health == 28) {
                 this.background.setTexture('stage1');
             }
@@ -77,10 +101,6 @@ export default new Phaser.Class({
             if (this.computer.health == 3) {
                 this.background.setTexture('stage6');
             }
-            if(this.computer.health >0){
-                this.computer.health--;
-                console.log('Hit');
-            }
         }, this);
 
     },
@@ -88,12 +108,11 @@ export default new Phaser.Class({
     update: function()
     {
         
-
         if (this.cursors.space.isDown|| this.computer.health ==0) {
-            // if(this.computer.health <=0){
-            console.log('broken');
-            this.computer.disableBody(true, true);
-            // }
+            if(this.computer.health <=0){
+                console.log('broken');
+                this.computer.disableBody(true, true);
+            }
             console.log('From frenzy to stealth');
             this.cursors.space.isDown=false;
             this.scene.resume('stealth');

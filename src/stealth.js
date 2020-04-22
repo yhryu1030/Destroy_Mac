@@ -145,7 +145,7 @@ export default new Phaser.Class({
             player.setVelocityX(0); 
 
             //Start the frenzy mode.
-            this.scene.launch('frenzy', {comp:computer,keys:this.input.keyboard});
+            this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard});
             this.scene.pause();
             console.log('from stealth to frenzy');  
         }
