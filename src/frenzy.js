@@ -54,7 +54,7 @@ export default new Phaser.Class({
             this.tweens.add({
                 targets: fist,
                 y: 450,
-                duration: 80,
+                duration: 50,
                 ease: 'Cubic.easeIn',
                 repeat: 0,
                 yoyo: true,
@@ -87,13 +87,11 @@ export default new Phaser.Class({
 
     update: function()
     {
-        
-
         if (this.cursors.space.isDown|| this.computer.health ==0) {
-            // if(this.computer.health <=0){
+            if(this.computer.health <=0){
             console.log('broken');
             this.computer.disableBody(true, true);
-            // }
+            }
             console.log('From frenzy to stealth');
             this.cursors.space.isDown=false;
             this.scene.resume('stealth');
