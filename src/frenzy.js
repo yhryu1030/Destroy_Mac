@@ -37,10 +37,9 @@ export default new Phaser.Class({
     {
         // background
         this.background = this.add.sprite(400, 300, 'imac');
-        // var stage1 = this.add.sprite(400, 300, 'stage1');
-        // this.background = this.add.sprite(400, 300, 'imac');
 
         //Sound
+        // this.input.keyboard.enabled=true;
         this.punch1 = this.sound.add('punchSound');
 
         // sprite
@@ -83,22 +82,22 @@ export default new Phaser.Class({
                 this.computer.health--;
                 console.log('Hit');
             }
-            if (this.computer.health == 28) {
+            if (this.computer.health <= 28 && this.computer.health > 23) {
                 this.background.setTexture('stage1');
             }
-            if (this.computer.health == 23) {
+            else if (this.computer.health <= 23 && this.computer.health > 18) {
                 this.background.setTexture('stage2');
             }
-            if (this.computer.health == 18) {
+            else if (this.computer.health <= 18 && this.computer.health > 13) {
                 this.background.setTexture('stage3');
             }
-            if (this.computer.health == 13) {
+            else if (this.computer.health <= 13 && this.computer.health > 8) {
                 this.background.setTexture('stage4');
             }
-            if (this.computer.health == 8) {
+            else if (this.computer.health <= 8 && this.computer.health > 3) {
                 this.background.setTexture('stage5');
             }
-            if (this.computer.health == 3) {
+            else if (this.computer.health <= 3) {
                 this.background.setTexture('stage6');
             }
         }, this);
@@ -114,7 +113,14 @@ export default new Phaser.Class({
                 this.computer.disableBody(true, true);
             }
             console.log('From frenzy to stealth');
+            // this.input.keyboard.enabled=false;
+
             this.cursors.space.isDown=false;
+            this.cursors.up.isDown=false;
+            this.cursors.down.isDown=false;
+            this.cursors.right.isDown=false;
+            this.cursors.left.isDown=false;
+
             this.scene.resume('stealth');
             this.stealthKeys.enabled=true;
             this.scene.stop();

@@ -12,7 +12,7 @@ export default new Phaser.Class({
     
     create: function(){
         this.add.image(400,300,"logo")
-        this.input.on('pointerdown',()=>this.scene.start('stealth'))
+        this.input.on('pointerdown',()=>this.scene.start('stealth',{level:1}))
     }
 
 

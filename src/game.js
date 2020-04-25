@@ -6,8 +6,8 @@ import gameover from "./gameover.js";
 var config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
-    width: 800,
-    height: 600,
+    width: 1080,
+    height: 620,
     physics: {
         default: 'arcade',
         arcade: {
