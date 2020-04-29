@@ -16,6 +16,8 @@ export default new Phaser.Class({
     init: function(data){
         this.stealthKeys=data.keys;
         this.computer=data.comp;
+        this.currentLevel=data.stage;
+        this.exit=data.exit;
         this.cursors=this.input.keyboard.createCursorKeys();
     },
 
@@ -109,8 +111,12 @@ export default new Phaser.Class({
         
         if (this.cursors.space.isDown|| this.computer.health ==0) {
             if(this.computer.health <=0){
-                console.log('broken');
+                this.currentLevel.targets--;
                 this.computer.disableBody(true, true);
+                if(this.currentLevel.targets==0){
+                    this.exit.setActive(true).setVisible(true);
+                    console.log('--------making the exit'); //debug
+                }
             }
             console.log('From frenzy to stealth');
             // this.input.keyboard.enabled=false;

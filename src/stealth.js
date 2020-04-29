@@ -1,9 +1,5 @@
-// var player;
-var platforms;
-var computers=[];
-var guards=[];
-
 import frenzy from "./frenzy.js";
+import stages from "./stages.js";
 
 export default new Phaser.Class({
     Extends: Phaser.Scene,
@@ -18,7 +14,8 @@ export default new Phaser.Class({
         this.player;
         this.computers=[];
         this.guards=[];
-        this.platforms=this.physics.add.staticGroup();;
+        this.platforms=this.physics.add.staticGroup();
+        this.exit;
 
         //Setting keyboard.
         this.cursors=this.input.keyboard.createCursorKeys();
@@ -28,38 +25,6 @@ export default new Phaser.Class({
         this.reset=false;
     },
 
-    stages: [
-        //Stage 1
-        {//Player starting location
-        player: {X:300,Y:400},
-        walls:[
-        //Big bottom room    
-        {X:1020, Y:120,scale:{w:0.4,h:0.5},type:'wallH'},
-        {X:960, Y:140,scale:{w:0.25,h:0.5},type:'wallV'},
-        {X:960, Y:430,scale:{w:0.25,h:1},type:'wallV'},
-        {X:885, Y:500,scale:{w:0.5,h:0.5},type:'wallH'},
-        {X:700, Y:500,scale:{w:0.35,h:0.5},type:'wallH'},
-        {X:560, Y:500,scale:{w:0.25,h:0.5},type:'wallH'},
-        {X:530, Y:590,scale:{w:0.25,h:1},type:'wallV'},
-        //Top long room
-        {X:960, Y:0,scale:{w:0.25,h:0.5},type:'wallV'},
-        {X:550, Y:100,scale:{w:2,h:0.5},type:'wallH'},
-        {X:100, Y:100,scale:{w:0.75,h:0.5},type:'wallH'},
-        //Side Room
-        {X:180, Y:180,scale:{w:0.25,h:0.7},type:'wallV'},
-        {X:90, Y:350,scale:{w:0.7,h:0.4},type:'wallH'},
-        //Main Room walls
-        {X:540, Y:320,scale:{w:0.7,h:0.7},type:'wallV'},
-        {X:440, Y:320,scale:{w:0.7,h:0.7},type:'wallV'},
-        {X:640, Y:320,scale:{w:0.7,h:0.7},type:'wallV'},
-        {X:740, Y:320,scale:{w:0.7,h:0.5},type:'wallV'}],
-        computers:[
-        {X:100,Y:160},
-        {X:1050,Y:150},
-        {X:560,Y:570}]},
-        //Stage 2
-        {platforms:[{X:400, Y:0}, {X:400, Y:100},{X:400, Y:200}]} //Level 2
-    ],
     preload: function ()
     {
         this.load.image('obstacle', 'assets/images/obstacle.png');
@@ -68,24 +33,32 @@ export default new Phaser.Class({
         this.load.image('computer','assets/images/computer.png');
         this.load.image('wallH','assets/images/wallH.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('wallV','assets/images/wallV.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
+        this.load.image('exit','assets/images/exit.png');
     },
 
     create: function ()
     {
         //Setting obstacles
-        var currentLevel=this.stages[this.level-1];
-        this.setWalls(this.platforms,currentLevel);
+        this.currentLevel=stages[this.level-1];
+        this.setWalls(this.platforms,this.currentLevel);
         
         //Setting player
-        this.setPlayer(currentLevel);
+        this.setPlayer(this.currentLevel);
 
         //Zoom in on the player with limited vision.
         this.cameras.main.startFollow(this.player);
         this.camera.zoomTo(4);
         
         //Setting computer(s)
-        var compList=currentLevel.computers;
+        var compList=this.currentLevel.computers;
         this.setComputers(this.computers,compList);
+
+        //Setting exit
+        
+        this.exit=this.physics.add.sprite(this.currentLevel.exit.X, this.currentLevel.exit.Y, 'exit');
+        this.exit.setDisplaySize(30,30);
+        this.exit.setActive(false).setVisible(false);
+        
 
         //Setting guards
         this.guards[0] = this.physics.add.sprite(100, 60, 'guard');
@@ -101,6 +74,8 @@ export default new Phaser.Class({
         this.physics.add.collider(this.platforms, this.guards);
         this.physics.add.collider(this.player, this.guards,this.getCaught,null,this);
         this.physics.add.overlap(this.player, this.computers, this.breakComp, null, this);
+        this.physics.add.overlap(this.player, this.exit, this.clearLevel, null, this);
+
     },
 
 
@@ -217,11 +192,16 @@ export default new Phaser.Class({
             player.setVelocityX(0); 
 
             //Start the frenzy mode.
-            this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard});
+            this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard, stage:this.currentLevel,
+            exit:this.exit});
             this.scene.pause();
             console.log('from stealth to frenzy');  
         }
 
+    },
+
+    clearLevel: function(player,exit){
+        this.scene.start('stealth',{level:(this.level+1)});
     }
 
 });
