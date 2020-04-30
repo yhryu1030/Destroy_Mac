@@ -201,7 +201,9 @@ export default new Phaser.Class({
     },
 
     clearLevel: function(player,exit){
-        this.scene.start('stealth',{level:(this.level+1)});
+        if(this.currentLevel.targets<=0){
+            this.scene.start('stealth',{level:(this.level+1)});
+        }
     }
 
 });

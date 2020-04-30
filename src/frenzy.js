@@ -113,7 +113,7 @@ export default new Phaser.Class({
             if(this.computer.health <=0){
                 this.currentLevel.targets--;
                 this.computer.disableBody(true, true);
-                if(this.currentLevel.targets==0){
+                if(this.currentLevel.targets<=0){
                     this.exit.setActive(true).setVisible(true);
                     console.log('--------making the exit'); //debug
                 }
