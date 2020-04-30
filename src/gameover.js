@@ -15,7 +15,7 @@ export default new Phaser.Class({
     },
     
     create: function(){
-        this.add.image(400,300,"gameover")
+        this.add.image(500,310,"gameover")
         this.input.on('pointerdown', function () {
             this.stealthKeys.enabled=true;
             this.scene.start('stealth', {level:1});

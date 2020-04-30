@@ -7,12 +7,15 @@ export default new Phaser.Class({
     },
 
     preload: function(){
-        this.load.image('logo','assets/images/start.jpg')
+        this.load.image('title','assets/images/title.png');
+        this.load.image('start','assets/images/start.png');
     },
-    
+
     create: function(){
-        this.add.image(400,300,"logo")
-        this.input.on('pointerdown',()=>this.scene.start('stealth',{level:1}))
+        this.add.image(500,310,"title");
+        var button = this.add.image(590,500,"start")
+            .setInteractive()
+            .on('pointerdown',()=>this.scene.start('stealth',{level:1}));
     }
 
 
