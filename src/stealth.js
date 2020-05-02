@@ -24,7 +24,7 @@ export default new Phaser.Class({
         this.cursors=this.input.keyboard.createCursorKeys();
         this.gameOver=false;
         this.level=data.level;
-        this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
+        // this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
         this.reset=false;
     },
 
@@ -52,8 +52,8 @@ export default new Phaser.Class({
         this.setPlayer(this.currentLevel);
 
         //Zoom in on the player with limited vision.
-        this.cameras.main.startFollow(this.player);
-        this.camera.zoomTo(4);
+        // this.cameras.main.startFollow(this.player);
+        // this.camera.zoomTo(4);
         
         //Setting computer(s)
         var compList=this.currentLevel.computers;
@@ -190,17 +190,17 @@ export default new Phaser.Class({
         for(var guard of this.guards){
             patrol=this.guardsInfo[i].patrol;
             patrolSpeed=Math.floor((Math.random() * (200-100)) + defaultSpeed);
-            if(this.guards[i].x > patrol.point1.X){
+            if(this.guards[i].x < patrol.point1.X){
+                this.guards[i].setVelocityX(+patrolSpeed);
+            }
+            else if(this.guards[i].x > patrol.point2.X){
                 this.guards[i].setVelocityX(-patrolSpeed);
             }
-            else if(this.guards[i].x < patrol.point2.X){
-                this.guards[i].setVelocityX(patrolSpeed);
+            if(this.guards[i].y< patrol.point1.Y){
+                this.guards[i].setVelocityY(+patrolSpeed);
             }
-            if(this.guards[i].y> patrol.point1.Y){
+            else if(this.guards[i].y > patrol.point2.Y){
                 this.guards[i].setVelocityY(-patrolSpeed);
-            }
-            else if(this.guards[i].y < patrol.point2.Y){
-                this.guards[i].setVelocityY(patrolSpeed);
             }
             i++;
         }

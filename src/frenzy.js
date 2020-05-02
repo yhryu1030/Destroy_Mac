@@ -31,7 +31,6 @@ export default new Phaser.Class({
         this.load.image('stage5', 'assets/images/Rstage5.png');
         this.load.image('stage6', 'assets/images/Rstage6.png');
         this.load.image('fist', 'assets/punching/punch/punch6.png');
-        // this.load.multiatlas('punching', 'assets/punching.json', 'assets'); // loads sprite sheet
         this.load.audio('punchSound','assets/sound/punch1.mp3'); //loads the punching sound
     },
 
