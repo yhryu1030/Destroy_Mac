@@ -109,7 +109,7 @@ export default new Phaser.Class({
     update: function()
     {
         
-        if (this.cursors.space.isDown|| this.computer.health ==0) {
+        if (this.computer.health ==0) {
             if(this.computer.health <=0){
                 this.currentLevel.targets--;
                 this.computer.disableBody(true, true);
