@@ -32,8 +32,15 @@ export default [
     exit:{
         X:1060,
         Y:60,
-    }},
-    //Stage 2
+    },
+    //Point 1's values will always be smaller. Keep that in mind for structure;
+    guards:[
+        {X:400, Y:60,patrol:{point1:{X:100, Y:60},point2:{X:600, Y:60}}},
+        {X:900, Y:150,patrol:{point1:{X:900, Y:100},point2:{X:900, Y:450}}},
+        {X:400, Y:300,patrol:{point1:{X:400, Y:150},point2:{X:400, Y:500}}},
+        {X:900, Y:450,patrol:{point1:{X:50, Y:450},point2:{X:900, Y:450}}}
+    ]},
+    //Stage 2 (temporary)
     {
     player: {X:300,Y:400},    
     walls:[
@@ -49,5 +56,10 @@ export default [
     exit:{
         X:300,
         Y:300,
-    }}
+    },
+    guards:[
+        {X:400, Y:60,patrol:{point1:{X:600, Y:60},point2:{X:100, Y:60}}},
+        {X:900, Y:150,patrol:{point1:{X:900, Y:450},point2:{X:900, Y:100}}},
+        {X:400, Y:300,patrol:{point1:{X:400, Y:500},point2:{X:400, Y:150}}}
+    ]}
 ]

@@ -31,7 +31,6 @@ export default new Phaser.Class({
         this.load.image('stage5', 'assets/images/Rstage5.png');
         this.load.image('stage6', 'assets/images/Rstage6.png');
         this.load.image('fist', 'assets/punching/punch/punch6.png');
-        // this.load.multiatlas('punching', 'assets/punching.json', 'assets'); // loads sprite sheet
         this.load.audio('punchSound','assets/sound/punch1.mp3'); //loads the punching sound
     },
 
@@ -109,11 +108,11 @@ export default new Phaser.Class({
     update: function()
     {
         
-        if (this.cursors.space.isDown|| this.computer.health ==0) {
+        if (this.computer.health ==0) {
             if(this.computer.health <=0){
                 this.currentLevel.targets--;
                 this.computer.disableBody(true, true);
-                if(this.currentLevel.targets==0){
+                if(this.currentLevel.targets<=0){
                     this.exit.setActive(true).setVisible(true);
                     console.log('--------making the exit'); //debug
                 }

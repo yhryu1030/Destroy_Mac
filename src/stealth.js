@@ -1,5 +1,6 @@
 import frenzy from "./frenzy.js";
 import stages from "./stages.js";
+var defaultSpeed=100;
 
 export default new Phaser.Class({
     Extends: Phaser.Scene,
@@ -14,6 +15,8 @@ export default new Phaser.Class({
         this.player;
         this.computers=[];
         this.guards=[];
+        this.guardsInfo=[];
+        this.lines=[];
         this.platforms=this.physics.add.staticGroup();
         this.exit;
 
@@ -21,7 +24,7 @@ export default new Phaser.Class({
         this.cursors=this.input.keyboard.createCursorKeys();
         this.gameOver=false;
         this.level=data.level;
-        this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
+        // this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
         this.reset=false;
     },
 
@@ -34,10 +37,13 @@ export default new Phaser.Class({
         this.load.image('wallH','assets/images/wallH.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('wallV','assets/images/wallV.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('exit','assets/images/exit.png');
+        // this.load.image('background', 'assets/images/background.jpg');
     },
 
     create: function ()
     {
+        // var background=this.add.image(540, 310, 'background');
+
         //Setting obstacles
         this.currentLevel=stages[this.level-1];
         this.setWalls(this.platforms,this.currentLevel);
@@ -46,8 +52,8 @@ export default new Phaser.Class({
         this.setPlayer(this.currentLevel);
 
         //Zoom in on the player with limited vision.
-        this.cameras.main.startFollow(this.player);
-        this.camera.zoomTo(4);
+        // this.cameras.main.startFollow(this.player);
+        // this.camera.zoomTo(4);
         
         //Setting computer(s)
         var compList=this.currentLevel.computers;
@@ -61,14 +67,8 @@ export default new Phaser.Class({
         
 
         //Setting guards
-        this.guards[0] = this.physics.add.sprite(100, 60, 'guard');
-        this.guards[0].setDisplaySize(30,40)
-        this.guards[0].setBounce(0);
-        this.guards[0].setCollideWorldBounds(true);
-        
-        this.guards[0].allowGravity = false;
-        this.guards[0].setVelocityX(100);
-        
+        this.setGuards(this.guards, this.currentLevel,this.guardsInfo);
+
         //Setting physics and logics
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.platforms, this.guards);
@@ -82,6 +82,7 @@ export default new Phaser.Class({
     update: function()
     {
         this.patrol();
+        // this.graphics.strokeLineShape(line);
         if (this.cursors.up.isUp && this.cursors.down.isUp){
             this.player.setVelocityY(0);
         }
@@ -132,6 +133,48 @@ export default new Phaser.Class({
         }
     },
 
+    setGuards:function(guards,currentLevel,guardsInfo){
+        var i =0;
+        var coin;//=Math.floor((Math.random() * 2) + 1);
+        var patrolSpeed;
+        for(var guard of currentLevel.guards){
+            this.guardsInfo[i]={patrol:guard.patrol,chase:false};
+            //Random Speed
+            patrolSpeed=Math.floor((Math.random() * (200-100)) + defaultSpeed);
+            //Add the guards to the scene.
+            this.guards[i] = this.physics.add.sprite(guard.X, 
+                guard.Y, 'guard');
+            this.guards[i].setDisplaySize(30,40)
+            this.guards[i].setBounce(0);
+            this.guards[i].setCollideWorldBounds(true);            
+            this.guards[i].allowGravity = false;
+            console.log('Guard',i,': \t X:', this.guards[i].x, ' \t Y:', this.guards[i].y);
+            //Setting up initial condition of the guard in the x-direction.
+            coin=Math.floor((Math.random() * 2) + 1);
+            if(this.guards[i].x != this.guardsInfo[i].patrol.point1.X || 
+                this.guards[i].x != this.guardsInfo[i].patrol.point2.X){
+                if(coin==2){
+                    this.guards[i].setVelocityX(patrolSpeed);
+                }
+                else{
+                    this.guards[i].setVelocityX(-patrolSpeed);
+                }
+            }
+            // Setting up initial condition of the guard in y-direction.
+            coin=Math.floor((Math.random() * 2) + 1);
+            if(this.guards[i].y != this.guardsInfo[i].patrol.point1.Y || 
+                this.guards[i].y != this.guardsInfo[i].patrol.point2.Y){
+                if(coin==2){
+                    this.guards[i].setVelocityY(patrolSpeed);
+                }
+                else{
+                    this.guards[i].setVelocityY(-patrolSpeed);
+                }
+            }
+            i++;
+        }    
+    },
+
     setPlayer: function(currentLevel){
         this.player = this.physics.add.sprite(currentLevel.player.X, currentLevel.player.Y, 'student');
         this.player.setBounce(0);
@@ -142,11 +185,24 @@ export default new Phaser.Class({
     },
 
     patrol: function(){
-        if(this.guards[0].x>600){
-            this.guards[0].setVelocityX(-100);
-        }
-        if(this.guards[0].x<100){ 
-            this.guards[0].setVelocityX(100);
+        var i=0;
+        var patrol,x, patrolSpeed;
+        for(var guard of this.guards){
+            patrol=this.guardsInfo[i].patrol;
+            patrolSpeed=Math.floor((Math.random() * (200-100)) + defaultSpeed);
+            if(this.guards[i].x < patrol.point1.X){
+                this.guards[i].setVelocityX(+patrolSpeed);
+            }
+            else if(this.guards[i].x > patrol.point2.X){
+                this.guards[i].setVelocityX(-patrolSpeed);
+            }
+            if(this.guards[i].y< patrol.point1.Y){
+                this.guards[i].setVelocityY(+patrolSpeed);
+            }
+            else if(this.guards[i].y > patrol.point2.Y){
+                this.guards[i].setVelocityY(-patrolSpeed);
+            }
+            i++;
         }
     },
 
@@ -176,32 +232,32 @@ export default new Phaser.Class({
     },
 
     breakComp: function(player,computer){
-        if(this.cursors.space.isDown){
-            //Reset keys
-            this.input.keyboard.enabled=false;
+        //Reset keys
+        this.input.keyboard.enabled=false;
             
-            this.cursors.space.isDown=false;
+        this.cursors.space.isDown=false;
             
-            this.cursors.down.isDown=false;
-            this.cursors.up.isDown=false;
-            this.cursors.right.isDown=false;
-            this.cursors.left.isDown=false;
+        this.cursors.down.isDown=false;
+        this.cursors.up.isDown=false;
+        this.cursors.right.isDown=false;
+        this.cursors.left.isDown=false;
 
-            //Reset the player's velocity
-            player.setVelocityY(0);
-            player.setVelocityX(0); 
+        //Reset the player's velocity
+        player.setVelocityY(0);
+        player.setVelocityX(0); 
 
-            //Start the frenzy mode.
-            this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard, stage:this.currentLevel,
-            exit:this.exit});
-            this.scene.pause();
-            console.log('from stealth to frenzy');  
-        }
+        //Start the frenzy mode.
+        this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard, stage:this.currentLevel,
+        exit:this.exit});
+        this.scene.pause();
+        console.log('from stealth to frenzy');  
 
     },
 
     clearLevel: function(player,exit){
-        this.scene.start('stealth',{level:(this.level+1)});
+        if(this.currentLevel.targets<=0){
+            this.scene.start('stealth',{level:(this.level+1)});
+        }
     }
 
 });
