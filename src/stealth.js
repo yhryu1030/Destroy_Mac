@@ -24,19 +24,20 @@ export default new Phaser.Class({
         this.cursors=this.input.keyboard.createCursorKeys();
         this.gameOver=false;
         this.level=data.level;
-        // this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
+        this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
         this.reset=false;
     },
 
     preload: function ()
     {
         this.load.image('obstacle', 'assets/images/obstacle.png');
-        this.load.image('student', 'assets/images/student.png');
+        this.load.image('student', 'assets/images/player.png');
         this.load.image('guard','assets/images/guard.png');
         this.load.image('computer','assets/images/computer.png');
         this.load.image('wallH','assets/images/wallH.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('wallV','assets/images/wallV.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('exit','assets/images/exit.png');
+        
         // this.load.image('background', 'assets/images/background.jpg');
     },
 
@@ -52,8 +53,8 @@ export default new Phaser.Class({
         this.setPlayer(this.currentLevel);
 
         //Zoom in on the player with limited vision.
-        // this.cameras.main.startFollow(this.player);
-        // this.camera.zoomTo(4);
+        this.cameras.main.startFollow(this.player);
+        this.camera.zoomTo(4);
         
         //Setting computer(s)
         var compList=this.currentLevel.computers;
@@ -75,6 +76,8 @@ export default new Phaser.Class({
         this.physics.add.collider(this.player, this.guards,this.getCaught,null,this);
         this.physics.add.overlap(this.player, this.computers, this.breakComp, null, this);
         this.physics.add.overlap(this.player, this.exit, this.clearLevel, null, this);
+
+
 
     },
 
@@ -177,8 +180,9 @@ export default new Phaser.Class({
 
     setPlayer: function(currentLevel){
         this.player = this.physics.add.sprite(currentLevel.player.X, currentLevel.player.Y, 'student');
+        this.player.setDisplaySize(27.8,35.7);
         this.player.setBounce(0);
-        this.player.setScale(0.5);
+        //this.player.setScale(0.5);
         this.player.setCollideWorldBounds(true);
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
@@ -222,8 +226,9 @@ export default new Phaser.Class({
             this.cursors.up.isDown=false;
             this.cursors.right.isDown=false;
             this.cursors.left.isDown=false;
+            
             this.scene.start('gameover',{keys:this.input.keyboard, cursors:this.cursors});
-
+            
 
         }
 

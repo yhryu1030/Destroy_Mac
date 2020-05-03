@@ -9,6 +9,7 @@ export default new Phaser.Class({
     preload: function(){
         this.load.image('title','assets/images/title.png');
         this.load.image('start','assets/images/start.png');
+        this.load.audio('bgm','assets/sound/stealth.mp3');
     },
 
     create: function(){
@@ -23,6 +24,12 @@ export default new Phaser.Class({
             .on('pointerup', () => {
               this.enterButtonHoverState();
           });
+        //setting up bgm
+        let bgm = this.sound.add('bgm');
+        bgm.play({
+            volume:.3,
+            loop:true
+        })
     },
     
     enterButtonHoverState() {
