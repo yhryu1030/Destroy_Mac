@@ -48,24 +48,24 @@ export default new Phaser.Class({
         //Setting obstacles
         this.currentLevel=stages[this.level-1];
         this.setWalls(this.platforms,this.currentLevel);
-        
+
         //Setting player
         this.setPlayer(this.currentLevel);
 
         //Zoom in on the player with limited vision.
         this.cameras.main.startFollow(this.player);
-        this.camera.zoomTo(2);
-        
+        this.camera.zoomTo(1.5);
+
         //Setting computer(s)
         var compList=this.currentLevel.computers;
         this.setComputers(this.computers,compList);
 
         //Setting exit
-        
+
         this.exit=this.physics.add.sprite(this.currentLevel.exit.X, this.currentLevel.exit.Y, 'exit');
         this.exit.setDisplaySize(30,30);
         this.exit.setActive(false).setVisible(false);
-        
+
 
         //Setting guards
         this.setGuards(this.guards, this.currentLevel,this.guardsInfo);
@@ -94,7 +94,7 @@ export default new Phaser.Class({
             this.player.setVelocityY(0);
         }
         if (this.cursors.left.isUp && this.cursors.right.isUp){
-            this.player.setVelocityX(0); 
+            this.player.setVelocityX(0);
         }
         //This a way to stop the bug of nonzero velocity even when the key is not pressed.
         if((!this.cursors.left.isDown && !this.cursors.right.isDown)&&this.player.body.velocity.x!=0){
@@ -103,7 +103,7 @@ export default new Phaser.Class({
         if((!this.cursors.up.isDown && !this.cursors.down.isDown)&&this.player.body.velocity.y!=0){
             this.player.setVelocityY(0);
         }
-    
+
         if (this.cursors.up.isDown)
         {
             this.player.setVelocityY(-160);
@@ -123,14 +123,14 @@ export default new Phaser.Class({
     },
 
     setWalls: function(platforms,currentLevel){
-        for(var wall of currentLevel.walls){ //for-of loop, 
+        for(var wall of currentLevel.walls){ //for-of loop,
             platforms.create(wall.X, wall.Y, wall.type).setScale(wall.scale.w,wall.scale.h).refreshBody();
         }
     },
 
     setComputers: function(computers,compList){
         var i=0;
-        for(var computer of compList){ //for-of loop, 
+        for(var computer of compList){ //for-of loop,
             computers[i]=this.physics.add.sprite(computer.X,computer.Y, 'computer');
             computers[i].setDisplaySize(30,30);
             computers[i].body.immovable = true;
@@ -148,16 +148,16 @@ export default new Phaser.Class({
             //Random Speed
             patrolSpeed=Math.floor((Math.random() * (200-100)) + defaultSpeed);
             //Add the guards to the scene.
-            this.guards[i] = this.physics.add.sprite(guard.X, 
+            this.guards[i] = this.physics.add.sprite(guard.X,
                 guard.Y, 'guard');
             this.guards[i].setDisplaySize(30,40)
             this.guards[i].setBounce(0);
-            this.guards[i].setCollideWorldBounds(true);            
+            this.guards[i].setCollideWorldBounds(true);
             this.guards[i].allowGravity = false;
             console.log('Guard',i,': \t X:', this.guards[i].x, ' \t Y:', this.guards[i].y);
             //Setting up initial condition of the guard in the x-direction.
             coin=Math.floor((Math.random() * 2) + 1);
-            if(this.guards[i].x != this.guardsInfo[i].patrol.point1.X || 
+            if(this.guards[i].x != this.guardsInfo[i].patrol.point1.X ||
                 this.guards[i].x != this.guardsInfo[i].patrol.point2.X){
                 if(coin==2){
                     this.guards[i].setVelocityX(patrolSpeed);
@@ -168,7 +168,7 @@ export default new Phaser.Class({
             }
             // Setting up initial condition of the guard in y-direction.
             coin=Math.floor((Math.random() * 2) + 1);
-            if(this.guards[i].y != this.guardsInfo[i].patrol.point1.Y || 
+            if(this.guards[i].y != this.guardsInfo[i].patrol.point1.Y ||
                 this.guards[i].y != this.guardsInfo[i].patrol.point2.Y){
                 if(coin==2){
                     this.guards[i].setVelocityY(patrolSpeed);
@@ -178,12 +178,12 @@ export default new Phaser.Class({
                 }
             }
             i++;
-        }    
+        }
     },
 
     setPlayer: function(currentLevel){
         this.player = this.physics.add.sprite(currentLevel.player.X, currentLevel.player.Y, 'student');
-        this.player.setDisplaySize(27.8,35.7);
+        this.player.setDisplaySize(20,26);
         this.player.setBounce(0);
         //this.player.setScale(0.5);
         this.player.setCollideWorldBounds(true);
@@ -217,33 +217,33 @@ export default new Phaser.Class({
         this.physics.pause();
 
         // this.player.setTint(0xff0001);
-    
+
         this.gameOver = true;
 
         if(this.gameOver){
 
             this.input.keyboard.enabled=false;
             this.cursors.space.isDown=false;
-            
+
             this.cursors.down.isDown=false;
             this.cursors.up.isDown=false;
             this.cursors.right.isDown=false;
             this.cursors.left.isDown=false;
-            
+
             this.scene.start('gameover',{keys:this.input.keyboard});
 
         }
 
-    
+
         console.log('Game Over'); //debugging
     },
 
     breakComp: function(player,computer){
         //Reset keys
         this.input.keyboard.enabled=false;
-            
+
         this.cursors.space.isDown=false;
-            
+
         this.cursors.down.isDown=false;
         this.cursors.up.isDown=false;
         this.cursors.right.isDown=false;
@@ -251,14 +251,14 @@ export default new Phaser.Class({
 
         //Reset the player's velocity
         player.setVelocityY(0);
-        player.setVelocityX(0); 
+        player.setVelocityX(0);
 
         //Start the frenzy mode.
         this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard, stage:this.currentLevel,
             exit:this.exit, distance: this.closestGuard()/**This passes down the smallest distance between
         the player and one of the guards. */});
         this.scene.pause();
-        console.log('from stealth to frenzy');  
+        console.log('from stealth to frenzy');
 
     },
 
@@ -279,9 +279,9 @@ export default new Phaser.Class({
         if(this.currentLevel.targets<=0){
             if(this.level==stages.length){
                 this.input.keyboard.enabled=false;
-            
+
                 this.cursors.space.isDown=false;
-                    
+
                 this.cursors.down.isDown=false;
                 this.cursors.up.isDown=false;
                 this.cursors.right.isDown=false;
