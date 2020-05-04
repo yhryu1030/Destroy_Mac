@@ -27,9 +27,9 @@ export default [
         {X:900, Y:152,scale:{w:0.2,h:0.6},type:'wallV'},
         {X:1000, Y:152,scale:{w:0.2,h:0.6},type:'wallV'},
 
-        //new left side
-        {X:200, Y:188,scale:{w:0.2,h:0.5},type:'wallV'},
-        {X:200, Y:308,scale:{w:0.2,h:0.5},type:'wallV'},
+        //left small door room
+        {X:200, Y:186,scale:{w:0.2,h:0.48},type:'wallV'},
+        {X:200, Y:311,scale:{w:0.2,h:0.48},type:'wallV'},
         {X:100, Y:350,scale:{w:0.7,h:0.4},type:'wallH'}
       ],
       computers:[
