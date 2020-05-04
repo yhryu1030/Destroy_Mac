@@ -23,6 +23,7 @@ export default new Phaser.Class({
         //Setting keyboard.
         this.cursors=this.input.keyboard.createCursorKeys();
         this.gameOver=false;
+        this.gameClear = false;
         this.level=data.level;
         // this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
         this.reset=false;
@@ -31,18 +32,18 @@ export default new Phaser.Class({
     preload: function ()
     {
         this.load.image('obstacle', 'assets/images/obstacle.png');
-        this.load.image('student', 'assets/images/student.png');
+        this.load.image('student', 'assets/images/player.png');
         this.load.image('guard','assets/images/guard.png');
         this.load.image('computer','assets/images/computer.png');
         this.load.image('wallH','assets/images/wallH.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('wallV','assets/images/wallV.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('exit','assets/images/exit.png');
-        // this.load.image('background', 'assets/images/background.jpg');
+        this.load.image('background', 'assets/images/background.png'); //https://www.webdesigndev.com/free-dark-backgrounds/ by Gre3g
     },
 
     create: function ()
     {
-        // var background=this.add.image(540, 310, 'background');
+        var background=this.add.image(540, 310, 'background').setScale(5.4,3.1);
 
         //Setting obstacles
         this.currentLevel=stages[this.level-1];
@@ -75,6 +76,8 @@ export default new Phaser.Class({
         this.physics.add.collider(this.player, this.guards,this.getCaught,null,this);
         this.physics.add.overlap(this.player, this.computers, this.breakComp, null, this);
         this.physics.add.overlap(this.player, this.exit, this.clearLevel, null, this);
+
+
 
     },
 
@@ -135,7 +138,7 @@ export default new Phaser.Class({
 
     setGuards:function(guards,currentLevel,guardsInfo){
         var i =0;
-        var coin;//=Math.floor((Math.random() * 2) + 1);
+        var coin;
         var patrolSpeed;
         for(var guard of currentLevel.guards){
             this.guardsInfo[i]={patrol:guard.patrol,chase:false};
@@ -177,8 +180,9 @@ export default new Phaser.Class({
 
     setPlayer: function(currentLevel){
         this.player = this.physics.add.sprite(currentLevel.player.X, currentLevel.player.Y, 'student');
+        this.player.setDisplaySize(27.8,35.7);
         this.player.setBounce(0);
-        this.player.setScale(0.5);
+        //this.player.setScale(0.5);
         this.player.setCollideWorldBounds(true);
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
@@ -196,7 +200,7 @@ export default new Phaser.Class({
             else if(this.guards[i].x > patrol.point2.X){
                 this.guards[i].setVelocityX(-patrolSpeed);
             }
-            if(this.guards[i].y< patrol.point1.Y){
+            else if(this.guards[i].y< patrol.point1.Y){
                 this.guards[i].setVelocityY(+patrolSpeed);
             }
             else if(this.guards[i].y > patrol.point2.Y){
@@ -222,8 +226,8 @@ export default new Phaser.Class({
             this.cursors.up.isDown=false;
             this.cursors.right.isDown=false;
             this.cursors.left.isDown=false;
-            this.scene.start('gameover',{keys:this.input.keyboard, cursors:this.cursors});
-
+            
+            this.scene.start('gameover',{keys:this.input.keyboard});
 
         }
 
@@ -248,7 +252,7 @@ export default new Phaser.Class({
 
         //Start the frenzy mode.
         this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard, stage:this.currentLevel,
-        exit:this.exit});
+            exit:this.exit});
         this.scene.pause();
         console.log('from stealth to frenzy');  
 
@@ -256,7 +260,20 @@ export default new Phaser.Class({
 
     clearLevel: function(player,exit){
         if(this.currentLevel.targets<=0){
-            this.scene.start('stealth',{level:(this.level+1)});
+            if(this.level==stages.length){
+                this.input.keyboard.enabled=false;
+            
+                this.cursors.space.isDown=false;
+                    
+                this.cursors.down.isDown=false;
+                this.cursors.up.isDown=false;
+                this.cursors.right.isDown=false;
+                this.cursors.left.isDown=false;
+                this.scene.start('gameclear',{keys:this.input.keyboard});
+            }
+            else{
+                this.scene.start('stealth',{level:this.level+1});
+            }
         }
     }
 

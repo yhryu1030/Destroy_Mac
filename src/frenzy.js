@@ -1,6 +1,6 @@
 var fist;
 var cursors;
-// var stealthkeys;
+
 
 import stealth from "./stealth.js";
 
@@ -18,18 +18,22 @@ export default new Phaser.Class({
         this.computer=data.comp;
         this.currentLevel=data.stage;
         this.exit=data.exit;
+        this.totalTime;
+        this.timeLeft;
+        this.timedEvent;
+        this.timeText;
         this.cursors=this.input.keyboard.createCursorKeys();
     },
 
     preload: function ()
     {
-        this.load.image('imac', 'assets/images/imac.jpg'); // from https://www.pexels.com/photo/photo-of-imac-near-macbook-1029757/
-        this.load.image('stage1', 'assets/images/Rstage1.png');
-        this.load.image('stage2', 'assets/images/Rstage2.png');
-        this.load.image('stage3', 'assets/images/Rstage3.png');
-        this.load.image('stage4', 'assets/images/Rstage4.png');
-        this.load.image('stage5', 'assets/images/Rstage5.png');
-        this.load.image('stage6', 'assets/images/Rstage6.png');
+        this.load.image('imac', 'assets/images/resimac.jpg'); // from https://www.pexels.com/photo/photo-of-imac-near-macbook-1029757/
+        this.load.image('stage1', 'assets/images/resstage1.png');
+        this.load.image('stage2', 'assets/images/resstage2.png');
+        this.load.image('stage3', 'assets/images/resstage3.png');
+        this.load.image('stage4', 'assets/images/resstage4.png');
+        this.load.image('stage5', 'assets/images/resstage5.png');
+        this.load.image('stage6', 'assets/images/resstage6.png');
         this.load.image('fist', 'assets/punching/punch/punch6.png');
         this.load.audio('punchSound','assets/sound/punch1.mp3'); //loads the punching sound
     },
@@ -37,14 +41,14 @@ export default new Phaser.Class({
     create: function ()
     {
         // background
-        this.background = this.add.sprite(400, 300, 'imac');
+        this.background = this.add.sprite(540, 310, 'imac');
 
         //Sound
         // this.input.keyboard.enabled=true;
         this.punch1 = this.sound.add('punchSound');
 
         // sprite
-        fist = this.add.image(400, 800, 'fist');
+        fist = this.add.image(510, 800, 'fist');
         // fist.setScale(0.5, 0.5);
         if (this.computer.health <= 28 && this.computer.health > 23) {
             this.background.setTexture('stage1');
@@ -103,11 +107,19 @@ export default new Phaser.Class({
             }
         }, this);
 
+        //Timer
+        this.timedEvent = this.time.delayedCall(10000, this.getCaught, [], this);
+        this.timeText = this.add.text(16, 16, 'Time Left: ', { fontSize: '32px', fill: '#000' });
+        this.totalTime=10;
+
     },
 
     update: function()
     {
-        
+        this.timeLeft=this.totalTime-this.timedEvent.getElapsedSeconds();
+        this.timeText.setText('Time Left: ' + this.timeLeft.toFixed(3));
+        // console.log('Event.progress: ',this.timedEvent.getProgress());
+
         if (this.computer.health ==0) {
             if(this.computer.health <=0){
                 this.currentLevel.targets--;
@@ -130,6 +142,19 @@ export default new Phaser.Class({
             this.stealthKeys.enabled=true;
             this.scene.stop();
         }
+    },
+
+    getCaught: function(){
+            
+        this.cursors.down.isDown=false;
+        this.cursors.up.isDown=false;
+        this.cursors.right.isDown=false;
+        this.cursors.left.isDown=false;
+        console.log('Game Over'); //debugging
+        this.scene.stop('stealth');
+        this.scene.stop();
+        this.scene.start('gameover',{keys:this.stealthKeys});
+
     }
 
 
