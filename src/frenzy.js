@@ -1,6 +1,6 @@
 var fist;
 var cursors;
-// var stealthkeys;
+
 
 import stealth from "./stealth.js";
 
@@ -18,6 +18,10 @@ export default new Phaser.Class({
         this.computer=data.comp;
         this.currentLevel=data.stage;
         this.exit=data.exit;
+        this.totalTime;
+        this.timeLeft;
+        this.timedEvent;
+        this.timeText;
         this.cursors=this.input.keyboard.createCursorKeys();
     },
 
@@ -103,11 +107,19 @@ export default new Phaser.Class({
             }
         }, this);
 
+        //Timer
+        this.timedEvent = this.time.delayedCall(10000, this.getCaught, [], this);
+        this.timeText = this.add.text(16, 16, 'Time Left: ', { fontSize: '32px', fill: '#000' });
+        this.totalTime=10;
+
     },
 
     update: function()
     {
-        
+        this.timeLeft=this.totalTime-this.timedEvent.getElapsedSeconds();
+        this.timeText.setText('Time Left: ' + this.timeLeft.toFixed(3));
+        // console.log('Event.progress: ',this.timedEvent.getProgress());
+
         if (this.computer.health ==0) {
             if(this.computer.health <=0){
                 this.currentLevel.targets--;
@@ -130,6 +142,19 @@ export default new Phaser.Class({
             this.stealthKeys.enabled=true;
             this.scene.stop();
         }
+    },
+
+    getCaught: function(){
+            
+        this.cursors.down.isDown=false;
+        this.cursors.up.isDown=false;
+        this.cursors.right.isDown=false;
+        this.cursors.left.isDown=false;
+        console.log('Game Over'); //debugging
+        this.scene.stop('stealth');
+        this.scene.stop();
+        this.scene.start('gameover',{keys:this.stealthKeys});
+
     }
 
 

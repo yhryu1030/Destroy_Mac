@@ -25,7 +25,7 @@ export default new Phaser.Class({
         this.gameOver=false;
         this.gameClear = false;
         this.level=data.level;
-        this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
+        // this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
         this.reset=false;
     },
 
@@ -53,8 +53,8 @@ export default new Phaser.Class({
         this.setPlayer(this.currentLevel);
 
         //Zoom in on the player with limited vision.
-        this.cameras.main.startFollow(this.player);
-        this.camera.zoomTo(4);
+        // this.cameras.main.startFollow(this.player);
+        // this.camera.zoomTo(4);
         
         //Setting computer(s)
         var compList=this.currentLevel.computers;
@@ -138,7 +138,7 @@ export default new Phaser.Class({
 
     setGuards:function(guards,currentLevel,guardsInfo){
         var i =0;
-        var coin;//=Math.floor((Math.random() * 2) + 1);
+        var coin;
         var patrolSpeed;
         for(var guard of currentLevel.guards){
             this.guardsInfo[i]={patrol:guard.patrol,chase:false};
@@ -200,7 +200,7 @@ export default new Phaser.Class({
             else if(this.guards[i].x > patrol.point2.X){
                 this.guards[i].setVelocityX(-patrolSpeed);
             }
-            if(this.guards[i].y< patrol.point1.Y){
+            else if(this.guards[i].y< patrol.point1.Y){
                 this.guards[i].setVelocityY(+patrolSpeed);
             }
             else if(this.guards[i].y > patrol.point2.Y){
@@ -227,7 +227,7 @@ export default new Phaser.Class({
             this.cursors.right.isDown=false;
             this.cursors.left.isDown=false;
             
-            this.scene.start('gameover',{keys:this.input.keyboard, cursors:this.cursors});
+            this.scene.start('gameover',{keys:this.input.keyboard});
 
         }
 
@@ -260,7 +260,20 @@ export default new Phaser.Class({
 
     clearLevel: function(player,exit){
         if(this.currentLevel.targets<=0){
-            this.scene.start('stealth',{level:(this.level+1)});
+            if(this.level==stages.length){
+                this.input.keyboard.enabled=false;
+            
+                this.cursors.space.isDown=false;
+                    
+                this.cursors.down.isDown=false;
+                this.cursors.up.isDown=false;
+                this.cursors.right.isDown=false;
+                this.cursors.left.isDown=false;
+                this.scene.start('gameclear',{keys:this.input.keyboard});
+            }
+            else{
+                this.scene.start('stealth',{level:this.level+1});
+            }
         }
     }
 

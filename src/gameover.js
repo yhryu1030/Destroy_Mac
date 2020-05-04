@@ -1,3 +1,5 @@
+import stages from "./stages.js";
+
 export default new Phaser.Class({
     Extends: Phaser.Scene,
 
@@ -7,7 +9,6 @@ export default new Phaser.Class({
     },
     init: function(data){
         this.stealthKeys=data.keys;
-        this.stealthCursors=data.cursors;
     },
 
     preload: function(){
@@ -18,6 +19,9 @@ export default new Phaser.Class({
         this.add.image(500,310,"gameover")
         this.input.on('pointerdown', function () {
             this.stealthKeys.enabled=true;
+            for(var stage of stages){
+                stage.targets=stage.computers.length;
+            }
             this.scene.start('stealth', {level:1});
         }, this);
     }

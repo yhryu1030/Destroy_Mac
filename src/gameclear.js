@@ -1,3 +1,5 @@
+import stages from "./stages.js"
+
 export default new Phaser.Class({
     Extends: Phaser.Scene,
 
@@ -8,7 +10,6 @@ export default new Phaser.Class({
 
     init: function(data){
         this.stealthKeys=data.keys;
-        this.stealthCursors=data.cursors;
     },
 
     preload: function(){
@@ -16,6 +17,10 @@ export default new Phaser.Class({
     },
     
     create: function(){
+        for(var stage of stages){
+            stage.targets=stage.computers.length;
+        }
+        this.stealthKeys.enabled=true;
         this.add.text(20, 200, 'YOU HAVE CLEARED THE GAME!', { fontSize: '60px', fill: '#FFF' })
         
         this.clickButton = this.add.text(500, 500, 'Retry?', { fontSize: '30px', fill: '#0F0' })
@@ -24,7 +29,6 @@ export default new Phaser.Class({
             .on('pointerover', () => this.enterButtonHoverState() )
             .on('pointerout', () => this.enterButtonRestState() )
             .on('pointerdown', function() {
-                this.stealthKeys.enabled = true,
                 this.scene.start('stealth', {level:1})
             }, this)
             .on('pointerup', () => {
