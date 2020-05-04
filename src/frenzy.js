@@ -23,13 +23,13 @@ export default new Phaser.Class({
 
     preload: function ()
     {
-        this.load.image('imac', 'assets/images/imac.jpg'); // from https://www.pexels.com/photo/photo-of-imac-near-macbook-1029757/
-        this.load.image('stage1', 'assets/images/Rstage1.png');
-        this.load.image('stage2', 'assets/images/Rstage2.png');
-        this.load.image('stage3', 'assets/images/Rstage3.png');
-        this.load.image('stage4', 'assets/images/Rstage4.png');
-        this.load.image('stage5', 'assets/images/Rstage5.png');
-        this.load.image('stage6', 'assets/images/Rstage6.png');
+        this.load.image('imac', 'assets/images/resimac.jpg'); // from https://www.pexels.com/photo/photo-of-imac-near-macbook-1029757/
+        this.load.image('stage1', 'assets/images/resstage1.png');
+        this.load.image('stage2', 'assets/images/resstage2.png');
+        this.load.image('stage3', 'assets/images/resstage3.png');
+        this.load.image('stage4', 'assets/images/resstage4.png');
+        this.load.image('stage5', 'assets/images/resstage5.png');
+        this.load.image('stage6', 'assets/images/resstage6.png');
         this.load.image('fist', 'assets/punching/punch/punch6.png');
         this.load.audio('punchSound','assets/sound/punch1.mp3'); //loads the punching sound
     },
@@ -37,14 +37,14 @@ export default new Phaser.Class({
     create: function ()
     {
         // background
-        this.background = this.add.sprite(400, 300, 'imac');
+        this.background = this.add.sprite(540, 310, 'imac');
 
         //Sound
         // this.input.keyboard.enabled=true;
         this.punch1 = this.sound.add('punchSound');
 
         // sprite
-        fist = this.add.image(400, 800, 'fist');
+        fist = this.add.image(510, 800, 'fist');
         // fist.setScale(0.5, 0.5);
         if (this.computer.health <= 28 && this.computer.health > 23) {
             this.background.setTexture('stage1');
