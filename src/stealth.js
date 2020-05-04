@@ -23,6 +23,7 @@ export default new Phaser.Class({
         //Setting keyboard.
         this.cursors=this.input.keyboard.createCursorKeys();
         this.gameOver=false;
+        this.gameClear = false;
         this.level=data.level;
         this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
         this.reset=false;
@@ -228,7 +229,6 @@ export default new Phaser.Class({
             this.cursors.left.isDown=false;
             
             this.scene.start('gameover',{keys:this.input.keyboard, cursors:this.cursors});
-            
 
         }
 

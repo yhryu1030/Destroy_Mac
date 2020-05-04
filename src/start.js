@@ -24,6 +24,7 @@ export default new Phaser.Class({
             .on('pointerup', () => {
               this.enterButtonHoverState();
           });
+          
         //setting up bgm
         let bgm = this.sound.add('bgm');
         bgm.play({
