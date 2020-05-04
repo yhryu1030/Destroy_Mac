@@ -16,16 +16,16 @@ export default new Phaser.Class({
         this.computers=[];
         this.guards=[];
         this.guardsInfo=[];
-        this.lines=[];
         this.platforms=this.physics.add.staticGroup();
         this.exit;
+        // this.shortest=100000;
 
         //Setting keyboard.
         this.cursors=this.input.keyboard.createCursorKeys();
         this.gameOver=false;
         this.gameClear = false;
         this.level=data.level;
-        // this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
+        this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
         this.reset=false;
     },
 
@@ -53,8 +53,8 @@ export default new Phaser.Class({
         this.setPlayer(this.currentLevel);
 
         //Zoom in on the player with limited vision.
-        // this.cameras.main.startFollow(this.player);
-        // this.camera.zoomTo(4);
+        this.cameras.main.startFollow(this.player);
+        this.camera.zoomTo(2);
         
         //Setting computer(s)
         var compList=this.currentLevel.computers;
@@ -77,6 +77,7 @@ export default new Phaser.Class({
         this.physics.add.overlap(this.player, this.computers, this.breakComp, null, this);
         this.physics.add.overlap(this.player, this.exit, this.clearLevel, null, this);
 
+    
 
 
     },
@@ -86,6 +87,9 @@ export default new Phaser.Class({
     {
         this.patrol();
         // this.graphics.strokeLineShape(line);
+        if(this.cursors.space.isDown){
+            console.log('Closest guard\'s distance: ', this.closestGuard());
+        }
         if (this.cursors.up.isUp && this.cursors.down.isUp){
             this.player.setVelocityY(0);
         }
@@ -111,7 +115,6 @@ export default new Phaser.Class({
         if(this.cursors.right.isDown)
         {
             this.player.setVelocityX(160);
-            console.log('pressing right --------->')
         }
         if (this.cursors.left.isDown)
         {
@@ -252,10 +255,24 @@ export default new Phaser.Class({
 
         //Start the frenzy mode.
         this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard, stage:this.currentLevel,
-            exit:this.exit});
+            exit:this.exit, distance: this.closestGuard()/**This passes down the smallest distance between
+        the player and one of the guards. */});
         this.scene.pause();
         console.log('from stealth to frenzy');  
 
+    },
+
+    closestGuard: function(){
+        var distance;
+        var shortest=Phaser.Math.Distance.Between(this.player.x,this.player.y,
+            this.guards[0].x,this.guards[0].y); //Start off with any of the guard's distance.
+        for(var guard of this.guards){
+            distance=Phaser.Math.Distance.Between(this.player.x,this.player.y,guard.x,guard.y);
+            if(distance<shortest){
+                shortest=distance;
+            }
+        }
+        return shortest;
     },
 
     clearLevel: function(player,exit){

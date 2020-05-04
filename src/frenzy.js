@@ -15,13 +15,18 @@ export default new Phaser.Class({
 
     init: function(data){
         this.stealthKeys=data.keys;
+        
+        this.distance=data.distance;
+
         this.computer=data.comp;
         this.currentLevel=data.stage;
         this.exit=data.exit;
+        
         this.totalTime;
         this.timeLeft;
         this.timedEvent;
         this.timeText;
+        
         this.cursors=this.input.keyboard.createCursorKeys();
     },
 
@@ -40,6 +45,9 @@ export default new Phaser.Class({
 
     create: function ()
     {
+
+        console.log('The distance from the guard is :', this.distance);
+
         // background
         this.background = this.add.sprite(540, 310, 'imac');
 
