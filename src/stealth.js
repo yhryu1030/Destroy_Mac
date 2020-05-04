@@ -24,7 +24,7 @@ export default new Phaser.Class({
         this.cursors=this.input.keyboard.createCursorKeys();
         this.gameOver=false;
         this.level=data.level;
-        // this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
+        this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
         this.reset=false;
     },
 
@@ -37,12 +37,12 @@ export default new Phaser.Class({
         this.load.image('wallH','assets/images/wallH.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('wallV','assets/images/wallV.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('exit','assets/images/exit.png');
-        // this.load.image('background', 'assets/images/background.jpg');
+        this.load.image('background', 'assets/images/background.png'); //https://www.webdesigndev.com/free-dark-backgrounds/ by Gre3g
     },
 
     create: function ()
     {
-        // var background=this.add.image(540, 310, 'background');
+        var background=this.add.image(540, 310, 'background').setScale(5.4,3.1);
 
         //Setting obstacles
         this.currentLevel=stages[this.level-1];
@@ -52,8 +52,8 @@ export default new Phaser.Class({
         this.setPlayer(this.currentLevel);
 
         //Zoom in on the player with limited vision.
-        // this.cameras.main.startFollow(this.player);
-        // this.camera.zoomTo(4);
+        this.cameras.main.startFollow(this.player);
+        this.camera.zoomTo(4);
         
         //Setting computer(s)
         var compList=this.currentLevel.computers;
@@ -248,7 +248,7 @@ export default new Phaser.Class({
 
         //Start the frenzy mode.
         this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard, stage:this.currentLevel,
-        exit:this.exit});
+            exit:this.exit});
         this.scene.pause();
         console.log('from stealth to frenzy');  
 
