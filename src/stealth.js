@@ -39,11 +39,24 @@ export default new Phaser.Class({
         this.load.image('wallV','assets/images/wallV.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('exit','assets/images/exit.png');
         this.load.image('background', 'assets/images/background.png'); //https://www.webdesigndev.com/free-dark-backgrounds/ by Gre3g
+        this.load.spritesheet('explosion', 'assets/images/explode.png', {
+            frameWidth: 128, 
+            frameHeight: 128
+        }); // https://raw.githubusercontent.com/photonstorm/phaser-examples/master/examples/assets/games/invaders/explode.png
     },
 
     create: function ()
     {
         var background=this.add.image(540, 310, 'background').setScale(5.4,3.1);
+
+        // explosion
+        this.anims.create({
+            key: 'explode',
+            frames: this.anims.generateFrameNumbers('explosion'),
+            frameRate: 128,
+            repeat: 0,
+            hideOnComplete: true
+        });
 
         //Setting obstacles
         this.currentLevel=stages[this.level-1];
@@ -61,11 +74,9 @@ export default new Phaser.Class({
         this.setComputers(this.computers,compList);
 
         //Setting exit
-
         this.exit=this.physics.add.sprite(this.currentLevel.exit.X, this.currentLevel.exit.Y, 'exit');
         this.exit.setDisplaySize(30,30);
         this.exit.setActive(false).setVisible(false);
-
 
         //Setting guards
         this.setGuards(this.guards, this.currentLevel,this.guardsInfo);
@@ -76,16 +87,15 @@ export default new Phaser.Class({
         this.physics.add.collider(this.player, this.guards,this.getCaught,null,this);
         this.physics.add.overlap(this.player, this.computers, this.breakComp, null, this);
         this.physics.add.overlap(this.player, this.exit, this.clearLevel, null, this);
-
-    
-
-
     },
 
 
     update: function()
     {
         this.patrol();
+
+        this.checkForDestroyedComp();
+
         // this.graphics.strokeLineShape(line);
         if(this.cursors.space.isDown){
             console.log('Closest guard\'s distance: ', this.closestGuard());
@@ -239,6 +249,10 @@ export default new Phaser.Class({
     },
 
     breakComp: function(player,computer){
+        if (computer.health <= 0) {
+            return;
+        }
+
         //Reset keys
         this.input.keyboard.enabled=false;
 
@@ -259,7 +273,15 @@ export default new Phaser.Class({
         the player and one of the guards. */});
         this.scene.pause();
         console.log('from stealth to frenzy');
+    },
 
+    checkForDestroyedComp: function() {
+        for (var computer of this.computers) {
+            if (computer.health <= 0 && !computer.destroyed) {
+                computer.play('explode');
+                computer.destroyed = true;
+            }
+        }
     },
 
     closestGuard: function(){
