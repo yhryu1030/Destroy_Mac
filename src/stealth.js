@@ -18,7 +18,6 @@ export default new Phaser.Class({
         this.guardsInfo=[];
         this.platforms=this.physics.add.staticGroup();
         this.exit;
-        // this.shortest=100000;
 
         //Setting keyboard.
         this.cursors=this.input.keyboard.createCursorKeys();
@@ -193,21 +192,21 @@ export default new Phaser.Class({
 
     patrol: function(){
         var i=0;
-        var patrol,x, patrolSpeed;
+        var patrol,patrolSpeed;
         for(var guard of this.guards){
             patrol=this.guardsInfo[i].patrol;
             patrolSpeed=Math.floor((Math.random() * (200-100)) + defaultSpeed);
-            if(this.guards[i].x < patrol.point1.X){
-                this.guards[i].setVelocityX(+patrolSpeed);
+            if(guard.x < patrol.point1.X){
+                guard.setVelocityX(+patrolSpeed);
             }
-            else if(this.guards[i].x > patrol.point2.X){
-                this.guards[i].setVelocityX(-patrolSpeed);
+            else if(guard.x > patrol.point2.X){
+                guard.setVelocityX(-patrolSpeed);
             }
-            else if(this.guards[i].y< patrol.point1.Y){
-                this.guards[i].setVelocityY(+patrolSpeed);
+            else if(guard.y< patrol.point1.Y){
+                guard.setVelocityY(+patrolSpeed);
             }
-            else if(this.guards[i].y > patrol.point2.Y){
-                this.guards[i].setVelocityY(-patrolSpeed);
+            else if(guard.y > patrol.point2.Y){
+                guard.setVelocityY(-patrolSpeed);
             }
             i++;
         }
