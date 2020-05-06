@@ -40,9 +40,9 @@ export default new Phaser.Class({
         this.load.image('wallV','assets/images/wallV.png');//https://all-free-download.com/free-photos/download/green_leafy_wood_background_03_hd_picture_170049_download.html
         this.load.image('exit','assets/images/exit.png');
         this.load.image('background', 'assets/images/background.png'); //https://www.webdesigndev.com/free-dark-backgrounds/ by Gre3g
-        this.load.spritesheet('explosion', 'assets/images/explode.png', {
-            frameWidth: 128, 
-            frameHeight: 128
+        this.load.spritesheet('explosion', 'assets/images/explode2.png', {
+            frameWidth: 300, 
+            frameHeight: 300
         }); // https://raw.githubusercontent.com/photonstorm/phaser-examples/master/examples/assets/games/invaders/explode.png
     },
 
@@ -54,8 +54,8 @@ export default new Phaser.Class({
         this.anims.create({
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion'),
-            frameRate: 128,
-            repeat: 0,
+            frameRate: 30,
+            repeat: 1,
             hideOnComplete: true
         });
 
