@@ -19,9 +19,11 @@ export default new Phaser.Class({
         this.platforms=this.physics.add.staticGroup();
         this.exit;
 
+        this.targetText;
+        this.hpText;
+
         //Setting keyboard.
         this.cursors=this.input.keyboard.createCursorKeys();
-        this.gameOver=false;
         this.gameClear = false;
         this.level=data.level;
         this.camera = this.cameras.main.setBounds(0, 0,1080,620); //For zooming in for limited vision
@@ -86,6 +88,19 @@ export default new Phaser.Class({
         this.physics.add.collider(this.player, this.guards,this.getCaught,null,this);
         this.physics.add.overlap(this.player, this.computers, this.breakComp, null, this);
         this.physics.add.overlap(this.player, this.exit, this.clearLevel, null, this);
+
+        //Display computer numbers
+        this.targetText = this.add.text(200, 120, 'Time Left: ', { fontSize: '20px', fill: '#fff' });
+        this.hpText=this.add.text(200, 150, 'Lives Left: ', { fontSize: '20px',fill: '#fff' });
+        this.hpText.setScrollFactor(0,0);
+        this.targetText.setScrollFactor(0,0);
+
+        // Click to return to starting point.
+        this.input.on('pointerdown', function () {
+            this.player.setTint();
+            this.player.setPosition(this.currentLevel.player.X, this.currentLevel.player.Y);
+            this.physics.resume();
+        }, this);
     },
 
 
@@ -94,6 +109,11 @@ export default new Phaser.Class({
         this.patrol();
 
         this.checkForDestroyedComp();
+
+        this.targetText.setText('Computers Left: ' + this.currentLevel.targets);
+        this.hpText.setText('Lives Left: ' + this.player.health);
+        // scoreText.x = skater.body.position.x;
+        // scoreText.y = skater.body.position.x; 
 
         // this.graphics.strokeLineShape(line);
         if(this.cursors.space.isDown){
@@ -162,6 +182,7 @@ export default new Phaser.Class({
             this.guards[i].setDisplaySize(30,40)
             this.guards[i].setBounce(0);
             this.guards[i].setCollideWorldBounds(true);
+            this.guards[i].body.immovable = true;
             this.guards[i].allowGravity = false;
             console.log('Guard',i,': \t X:', this.guards[i].x, ' \t Y:', this.guards[i].y);
             //Setting up initial condition of the guard in the x-direction.
@@ -176,8 +197,8 @@ export default new Phaser.Class({
                 }
             }
             // Setting up initial condition of the guard in y-direction.
-            coin=Math.floor((Math.random() * 2) + 1);
-            if(this.guards[i].y != this.guardsInfo[i].patrol.point1.Y ||
+            // coin=Math.floor((Math.random() * 2) + 1);
+            else if(this.guards[i].y != this.guardsInfo[i].patrol.point1.Y ||
                 this.guards[i].y != this.guardsInfo[i].patrol.point2.Y){
                 if(coin==2){
                     this.guards[i].setVelocityY(patrolSpeed);
@@ -198,6 +219,7 @@ export default new Phaser.Class({
         this.player.setCollideWorldBounds(true);
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
+        this.player.health=3;
     },
 
     patrol: function(){
@@ -222,15 +244,15 @@ export default new Phaser.Class({
         }
     },
 
-    getCaught: function(player){
+    getCaught: function(player,guard){
         this.physics.pause();
 
-        // this.player.setTint(0xff0001);
+        player.setTint(0xff0001);
 
-        this.gameOver = true;
+        player.health--;
 
-        if(this.gameOver){
-
+        if(player.health<=0){
+            // console.log('Game Over'); //debugging
             this.input.keyboard.enabled=false;
             this.cursors.space.isDown=false;
 
@@ -244,7 +266,7 @@ export default new Phaser.Class({
         }
 
 
-        console.log('Game Over'); //debugging
+        
     },
 
     breakComp: function(player,computer){
