@@ -18,6 +18,7 @@ export default new Phaser.Class({
         this.guardsInfo=[];
         this.platforms=this.physics.add.staticGroup();
         this.exit;
+        this.caught=false;
 
         this.targetText;
         this.hpText;
@@ -97,9 +98,12 @@ export default new Phaser.Class({
 
         // Click to return to starting point.
         this.input.on('pointerdown', function () {
-            this.player.setTint();
-            this.player.setPosition(this.currentLevel.player.X, this.currentLevel.player.Y);
-            this.physics.resume();
+            if(this.caught){
+                this.player.setTint();
+                this.player.setPosition(this.currentLevel.player.X, this.currentLevel.player.Y);
+                this.physics.resume();
+                this.caught=false;
+            }
         }, this);
     },
 
@@ -251,6 +255,7 @@ export default new Phaser.Class({
 
         player.health--;
 
+        this.caught=true;
         if(player.health<=0){
             // console.log('Game Over'); //debugging
             this.input.keyboard.enabled=false;

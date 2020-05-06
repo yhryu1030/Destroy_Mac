@@ -48,13 +48,13 @@ export default new Phaser.Class({
         //Changing time depending on the distance.
         console.log('The distance from the guard is :', this.distance);
         if(this.distance>=300){
-            this.totalTime=10;
+            this.totalTime=11;
         }
         else if(this.distance>=150){
-            this.totalTime=6;
+            this.totalTime=7;
         }
         else{
-            this.totalTime=4;
+            this.totalTime=5;
         }
 
         // background
