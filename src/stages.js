@@ -1,11 +1,35 @@
 export default [
-
+// --------------------- Training stage 1 -------------------------------------
+    {
+        level:'tutorial1',
+        player:{X:600,Y:100},
+        walls:[
+        //left small door room
+        {X:500, Y:300,scale:{w:0.3,h:0.6},type:'wallV'},
+        {X:650, Y:300,scale:{w:0.3,h:0.6},type:'wallV'},
+        {X:575, Y:240,scale:{w:0.61,h:0.4},type:'wallH'},
+        {X:620, Y:351,scale:{w:0.23,h:0.4},type:'wallH'},
+        {X:530, Y:351,scale:{w:0.23,h:0.4},type:'wallH'}
+        ],
+        computers:[
+        {X:575,Y:300}
+        ],
+        targets:1,
+        exit:{X:575,Y:200},
+        //Point 1's values will always be smaller. Keep that in mind for structure;
+        guards:[
+        {X:1050, Y:310,patrol:{point1:{X:700, Y:310},point2:{X:1050, Y:310}}}
+        ]
+    },
+    
+    
     // --------------------- Cubicle stage -------------------------------------
 
     //Stage 1's initial conditions
     {
-      player:{X:100,Y:100},
-      walls:[
+        level:'1',
+        player:{X:100,Y:100},
+        walls:[
         // bottom long room
         {X:780, Y:550,scale:{w:2,h:0.5},type:'wallH'},
 
@@ -60,6 +84,7 @@ export default [
 
     //Stage 2's initial conditions
     {//Player starting location
+    level:'2',
     player: {X:300,Y:580},
     walls:[
     //Big bottom room
@@ -115,6 +140,7 @@ export default [
 
     //Stage 2 (temporary)
     {
+    level:3,
     player: {X:300,Y:400},
     walls:[
     {X:540, Y:320,scale:{w:0.7,h:0.7},type:'wallV'},

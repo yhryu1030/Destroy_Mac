@@ -67,6 +67,15 @@ export default new Phaser.Class({
         //Setting player
         this.setPlayer(this.currentLevel);
 
+        if(this.currentLevel.level=='tutorial1'){
+            this.arrowInstruction=this.add.text(this.player.x, this.player.y, 
+                'Use arrow keys to move', { fontSize: '16px', fill: '#fff' });
+            this.frenzyInstruction=this.add.text(300, 300, 
+                'Time in smashing dependent \non distance from the guard', { fontSize: '12px', fill: '#fff' });
+            this.timeInFrenzy=this.add.text(400, 400, 
+                    'Smash now,\nyou have :', { fontSize: '16px', fill: '#fff' });
+        }
+
         //Zoom in on the player with limited vision.
         this.cameras.main.startFollow(this.player);
         this.camera.zoomTo(1.5);
@@ -113,6 +122,21 @@ export default new Phaser.Class({
         this.patrol();
 
         this.checkForDestroyedComp();
+
+        if(this.currentLevel.level=='tutorial1'){
+            var distance=this.closestGuard();
+            var totTime;
+            if(distance>=300){
+                totTime=11;
+            }
+            else if(distance>=150){
+                totTime=7;
+            }
+            else{
+                totTime=5;
+            }
+            this.timeInFrenzy.setText('Enter Frenzy now,\nyou have :' + totTime.toFixed(2) + ' secs');
+        }
 
         this.targetText.setText('Computers Left: ' + this.currentLevel.targets);
         this.hpText.setText('Lives Left: ' + this.player.health);

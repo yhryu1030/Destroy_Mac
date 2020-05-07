@@ -21,7 +21,13 @@ export default new Phaser.Class({
         this.computer=data.comp;
         this.currentLevel=data.stage;
         this.exit=data.exit;
-        
+
+        //Tutorial setting
+        if(this.currentLevel.level=='tutorial1'){
+            this.clickMe;
+            this.tutorialClick=false;
+        }
+
         this.totalTime;
         this.timeLeft;
         this.timedEvent;
@@ -85,7 +91,10 @@ export default new Phaser.Class({
         else if (this.computer.health <= 3) {
             this.background.setTexture('stage6');
         }
-        
+
+        if(this.currentLevel.level=='tutorial1'){
+            this.clickMe= this.add.text(350, 100, 'Click Here to Smash', { fontSize: '35px', fill: '#000' });
+        }
 
         this.input.on('pointerdown', function () {
 
@@ -121,6 +130,10 @@ export default new Phaser.Class({
             }
             else if (this.computer.health <= 3) {
                 this.background.setTexture('stage6');
+            }
+
+            if(this.currentLevel.level=='tutorial1'){
+                this.clickMe.setActive(false).setVisible(false);
             }
         }, this);
 
