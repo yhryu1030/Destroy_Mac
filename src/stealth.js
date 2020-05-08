@@ -74,7 +74,9 @@ export default new Phaser.Class({
                 'Time in smashing dependent \non distance from the guard', { fontSize: '12px', fill: '#fff' });
             this.timeInFrenzy=this.add.text(400, 400, 
                     'Smash now,\nyou have :', { fontSize: '16px', fill: '#fff' });
-        }
+            this.clickReset=this.add.text(750, 350, 
+                'When caught, click to restart.', { fontSize: '16px', fill: '#fff' });
+        }        
 
         //Zoom in on the player with limited vision.
         this.cameras.main.startFollow(this.player);
@@ -320,7 +322,7 @@ export default new Phaser.Class({
         //Start the frenzy mode.
         this.scene.launch('frenzy', {comp:computer, keys:this.input.keyboard, stage:this.currentLevel,
             exit:this.exit, distance: this.closestGuard()/**This passes down the smallest distance between
-        the player and one of the guards. */});
+        the player and one of the guards. */, player:this.player});
         this.scene.pause();
         console.log('from stealth to frenzy');
     },

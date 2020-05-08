@@ -21,6 +21,7 @@ export default new Phaser.Class({
         this.computer=data.comp;
         this.currentLevel=data.stage;
         this.exit=data.exit;
+        this.player=data.player;
 
         //Tutorial setting
         if(this.currentLevel.level=='tutorial1'){
@@ -173,16 +174,25 @@ export default new Phaser.Class({
     },
 
     getCaught: function(){
-            
-        this.cursors.down.isDown=false;
-        this.cursors.up.isDown=false;
-        this.cursors.right.isDown=false;
-        this.cursors.left.isDown=false;
-        console.log('Game Over'); //debugging
-        this.scene.stop('stealth');
-        this.scene.stop();
-        this.scene.start('gameover',{keys:this.stealthKeys});
+        
+        this.player.health--;
 
+        if(this.player.health==0){
+            this.cursors.down.isDown=false;
+            this.cursors.up.isDown=false;
+            this.cursors.right.isDown=false;
+            this.cursors.left.isDown=false;
+            console.log('Game Over'); //debugging
+            this.scene.stop('stealth');
+            this.scene.stop();
+            this.scene.start('gameover',{keys:this.stealthKeys});
+        }
+        else{
+            this.player.setPosition(this.currentLevel.player.X, this.currentLevel.player.Y);
+            this.scene.resume('stealth');
+            this.stealthKeys.enabled=true;
+            this.scene.stop();
+        }
     }
 
 
