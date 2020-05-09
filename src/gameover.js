@@ -1,5 +1,5 @@
 import stages from "./stages.js";
-
+/** The following is setting up and running codes for the scene that appears when you lose all lives. */
 export default new Phaser.Class({
     Extends: Phaser.Scene,
 

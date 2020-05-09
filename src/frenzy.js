@@ -1,9 +1,5 @@
 var fist;
-var cursors;
-
-
-import stealth from "./stealth.js";
-
+/** The following is setting up and running codes for the frenzy mode. */
 export default new Phaser.Class({
 
     Extends: Phaser.Scene,
@@ -14,6 +10,7 @@ export default new Phaser.Class({
     },
 
     init: function(data){
+        //Receiving values from the stealth scene data.
         this.stealthKeys=data.keys;
         
         this.distance=data.distance;
@@ -29,12 +26,12 @@ export default new Phaser.Class({
             this.tutorialClick=false;
         }
 
+        //Setting timer.
         this.totalTime;
         this.timeLeft;
         this.timedEvent;
         this.timeText;
-        
-        this.cursors=this.input.keyboard.createCursorKeys();
+
     },
 
     preload: function ()
@@ -53,7 +50,6 @@ export default new Phaser.Class({
     create: function ()
     {
         //Changing time depending on the distance.
-        console.log('The distance from the guard is :', this.distance);
         if(this.distance>=300){
             this.totalTime=11;
         }
@@ -68,12 +64,11 @@ export default new Phaser.Class({
         this.background = this.add.sprite(540, 310, 'imac');
 
         //Sound
-        // this.input.keyboard.enabled=true;
         this.punch1 = this.sound.add('punchSound');
 
         // sprite
         fist = this.add.image(510, 800, 'fist');
-        // fist.setScale(0.5, 0.5);
+
         if (this.computer.health <= 28 && this.computer.health > 23) {
             this.background.setTexture('stage1');
         }
@@ -92,15 +87,13 @@ export default new Phaser.Class({
         else if (this.computer.health <= 3) {
             this.background.setTexture('stage6');
         }
-
+        //Click Here text in the tutorial level
         if(this.currentLevel.level=='tutorial1'){
             this.clickMe= this.add.text(350, 100, 'Click Here to Smash', { fontSize: '35px', fill: '#000' });
         }
-
+        //Hitting the computer
         this.input.on('pointerdown', function () {
 
-            console.log('punch');
-            console.log(this.computer.health);
             this.punch1.play();
             this.tweens.add({
                 targets: fist,
@@ -110,10 +103,9 @@ export default new Phaser.Class({
                 repeat: 0,
                 yoyo: true,
             });
-            if(this.computer.health >0){
-                this.computer.health--;
-                console.log('Hit');
-            }
+            
+            this.computer.health--;
+            
             if (this.computer.health <= 28 && this.computer.health > 23) {
                 this.background.setTexture('stage1');
             }
@@ -145,49 +137,31 @@ export default new Phaser.Class({
     },
 
     update: function()
-    {
+    {   //Updates time left for frenzy mode in the left hand corner.
         this.timeLeft=this.totalTime-this.timedEvent.getElapsedSeconds();
         this.timeText.setText('Time Left: ' + this.timeLeft.toFixed(3));
-        // console.log('Event.progress: ',this.timedEvent.getProgress());
 
-        if (this.computer.health ==0) {
-            if(this.computer.health <=0){
-                this.currentLevel.targets--;
-                if(this.currentLevel.targets<=0){
-                    this.exit.setActive(true).setVisible(true);
-                    console.log('--------making the exit'); //debug
-                }
+        if (this.computer.health <=0) {
+            this.currentLevel.targets--;
+            if(this.currentLevel.targets<=0){
+                this.exit.setActive(true).setVisible(true);
             }
-            console.log('From frenzy to stealth');
-            // this.input.keyboard.enabled=false;
-
-            this.cursors.space.isDown=false;
-            this.cursors.up.isDown=false;
-            this.cursors.down.isDown=false;
-            this.cursors.right.isDown=false;
-            this.cursors.left.isDown=false;
-
+            this.scene.stop();
             this.scene.resume('stealth');
             this.stealthKeys.enabled=true;
-            this.scene.stop();
         }
     },
 
     getCaught: function(){
         
         this.player.health--;
-
+        //Game over condition
         if(this.player.health==0){
-            this.cursors.down.isDown=false;
-            this.cursors.up.isDown=false;
-            this.cursors.right.isDown=false;
-            this.cursors.left.isDown=false;
-            console.log('Game Over'); //debugging
             this.scene.stop('stealth');
             this.scene.stop();
             this.scene.start('gameover',{keys:this.stealthKeys});
         }
-        else{
+        else{//Lose one life and go back to stealth's initial player's position.
             this.player.setPosition(this.currentLevel.player.X, this.currentLevel.player.Y);
             this.scene.resume('stealth');
             this.stealthKeys.enabled=true;

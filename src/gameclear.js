@@ -1,5 +1,5 @@
 import stages from "./stages.js"
-
+/** The following is setting up and running codes for the scene when you clear all available levels. */
 export default new Phaser.Class({
     Extends: Phaser.Scene,
 

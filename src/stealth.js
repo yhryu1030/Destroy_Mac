@@ -1,7 +1,6 @@
-import frenzy from "./frenzy.js";
 import stages from "./stages.js";
 var defaultSpeed=100;
-
+/** The following is setting up and running codes for the stealth mode. */
 export default new Phaser.Class({
     Extends: Phaser.Scene,
 
@@ -19,7 +18,7 @@ export default new Phaser.Class({
         this.platforms=this.physics.add.staticGroup();
         this.exit;
         this.caught=false;
-
+        //Texts at the top left corner
         this.targetText;
         this.hpText;
 
@@ -51,7 +50,7 @@ export default new Phaser.Class({
     {
         var background=this.add.image(540, 310, 'background').setScale(5.4,3.1);
 
-        // explosion
+        // explosion animation
         this.anims.create({
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion'),
@@ -142,13 +141,7 @@ export default new Phaser.Class({
 
         this.targetText.setText('Computers Left: ' + this.currentLevel.targets);
         this.hpText.setText('Lives Left: ' + this.player.health);
-        // scoreText.x = skater.body.position.x;
-        // scoreText.y = skater.body.position.x; 
 
-        // this.graphics.strokeLineShape(line);
-        if(this.cursors.space.isDown){
-            console.log('Closest guard\'s distance: ', this.closestGuard());
-        }
         if (this.cursors.up.isUp && this.cursors.down.isUp){
             this.player.setVelocityY(0);
         }
@@ -214,7 +207,6 @@ export default new Phaser.Class({
             this.guards[i].setCollideWorldBounds(true);
             this.guards[i].body.immovable = true;
             this.guards[i].allowGravity = false;
-            console.log('Guard',i,': \t X:', this.guards[i].x, ' \t Y:', this.guards[i].y);
             //Setting up initial condition of the guard in the x-direction.
             coin=Math.floor((Math.random() * 2) + 1);
             if(this.guards[i].x != this.guardsInfo[i].patrol.point1.X ||
@@ -227,7 +219,6 @@ export default new Phaser.Class({
                 }
             }
             // Setting up initial condition of the guard in y-direction.
-            // coin=Math.floor((Math.random() * 2) + 1);
             else if(this.guards[i].y != this.guardsInfo[i].patrol.point1.Y ||
                 this.guards[i].y != this.guardsInfo[i].patrol.point2.Y){
                 if(coin==2){
@@ -245,7 +236,6 @@ export default new Phaser.Class({
         this.player = this.physics.add.sprite(currentLevel.player.X, currentLevel.player.Y, 'student');
         this.player.setDisplaySize(20,26);
         this.player.setBounce(0);
-        //this.player.setScale(0.5);
         this.player.setCollideWorldBounds(true);
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
@@ -283,7 +273,6 @@ export default new Phaser.Class({
 
         this.caught=true;
         if(player.health<=0){
-            // console.log('Game Over'); //debugging
             this.input.keyboard.enabled=false;
             this.cursors.space.isDown=false;
 
@@ -301,15 +290,14 @@ export default new Phaser.Class({
     },
 
     breakComp: function(player,computer){
+        //Prevents the scene from constantly switching back and forth exploding.
         if (computer.health <= 0) {
             return;
         }
 
         //Reset keys
         this.input.keyboard.enabled=false;
-
         this.cursors.space.isDown=false;
-
         this.cursors.down.isDown=false;
         this.cursors.up.isDown=false;
         this.cursors.right.isDown=false;
@@ -324,7 +312,6 @@ export default new Phaser.Class({
             exit:this.exit, distance: this.closestGuard()/**This passes down the smallest distance between
         the player and one of the guards. */, player:this.player});
         this.scene.pause();
-        console.log('from stealth to frenzy');
     },
 
     checkForDestroyedComp: function() {
@@ -335,7 +322,7 @@ export default new Phaser.Class({
             }
         }
     },
-
+    //Returns the closest guard's distance from the player.
     closestGuard: function(){
         var distance;
         var shortest=Phaser.Math.Distance.Between(this.player.x,this.player.y,

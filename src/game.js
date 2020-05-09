@@ -16,7 +16,7 @@ var config = {
             debug: false
         }
     },
-    scene: [ start, stealth, frenzy, gameover, gameclear ]
+    scene: [ start, stealth, frenzy, gameover, gameclear ] //Setting up saves as one part of the game.
 };
 
 var game = new Phaser.Game(config);
