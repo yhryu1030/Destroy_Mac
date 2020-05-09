@@ -13,7 +13,7 @@ export default new Phaser.Class({
     },
 
     preload: function(){
-        // this.load.image('gameover','assets/images/gameover.jpg')
+
     },
     
     create: function(){
@@ -34,12 +34,6 @@ export default new Phaser.Class({
             .on('pointerup', () => {
                 this.enterButtonHoverState();
         });
-
-        // this.add.image(500,310,"gameover")
-        // this.input.on('pointerdown', function () {
-        //     this.stealthKeys.enabled=true;
-        //     this.scene.start('stealth', {level:1});
-        // }, this);
     },
 
     enterButtonHoverState() {
