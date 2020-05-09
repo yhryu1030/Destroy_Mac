@@ -75,7 +75,7 @@ export default new Phaser.Class({
             this.timeInFrenzy=this.add.text(400, 400, 
                     'Smash now,\nyou have :', { fontSize: '16px', fill: '#fff' });
             this.clickReset=this.add.text(750, 350, 
-                'When caught, click on left\nmouse to restart.', { fontSize: '16px', fill: '#fff' });
+                'When caught, click to restart.', { fontSize: '16px', fill: '#fff' });
         }        
 
         //Zoom in on the player with limited vision.
